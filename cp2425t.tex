@@ -1,0 +1,611 @@
+\documentclass[11pt, a4paper, fleqn]{article}
+\usepackage{cp2425t}
+\makeindex
+
+%================= lhs2tex=====================================================%
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{0.66084ex}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+%
+%
+%
+%
+%
+% This package provides two environments suitable to take the place
+% of hscode, called "plainhscode" and "arrayhscode". 
+%
+% The plain environment surrounds each code block by vertical space,
+% and it uses \abovedisplayskip and \belowdisplayskip to get spacing
+% similar to formulas. Note that if these dimensions are changed,
+% the spacing around displayed math formulas changes as well.
+% All code is indented using \leftskip.
+%
+% Changed 19.08.2004 to reflect changes in colorcode. Should work with
+% CodeGroup.sty.
+%
+\ReadOnlyOnce{polycode.fmt}%
+\makeatletter
+
+\newcommand{\hsnewpar}[1]%
+  {{\parskip=0pt\parindent=0pt\par\vskip #1\noindent}}
+
+% can be used, for instance, to redefine the code size, by setting the
+% command to \small or something alike
+\newcommand{\hscodestyle}{}
+
+% The command \sethscode can be used to switch the code formatting
+% behaviour by mapping the hscode environment in the subst directive
+% to a new LaTeX environment.
+
+\newcommand{\sethscode}[1]%
+  {\expandafter\let\expandafter\hscode\csname #1\endcsname
+   \expandafter\let\expandafter\endhscode\csname end#1\endcsname}
+
+% "compatibility" mode restores the non-polycode.fmt layout.
+
+\newenvironment{compathscode}%
+  {\par\noindent
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed\)%
+   \par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\compaths}{\sethscode{compathscode}}
+
+% "plain" mode is the proposed default.
+% It should now work with \centering.
+% This required some changes. The old version
+% is still available for reference as oldplainhscode.
+
+\newenvironment{plainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newenvironment{oldplainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+% Here, we make plainhscode the default environment.
+
+\newcommand{\plainhs}{\sethscode{plainhscode}}
+\newcommand{\oldplainhs}{\sethscode{oldplainhscode}}
+\plainhs
+
+% The arrayhscode is like plain, but makes use of polytable's
+% parray environment which disallows page breaks in code blocks.
+
+\newenvironment{arrayhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\parray}%
+  {\endparray\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newcommand{\arrayhs}{\sethscode{arrayhscode}}
+
+% The mathhscode environment also makes use of polytable's parray 
+% environment. It is supposed to be used only inside math mode 
+% (I used it to typeset the type rules in my thesis).
+
+\newenvironment{mathhscode}%
+  {\parray}{\endparray}
+
+\newcommand{\mathhs}{\sethscode{mathhscode}}
+
+% texths is similar to mathhs, but works in text mode.
+
+\newenvironment{texthscode}%
+  {\(\parray}{\endparray\)}
+
+\newcommand{\texths}{\sethscode{texthscode}}
+
+% The framed environment places code in a framed box.
+
+\def\codeframewidth{\arrayrulewidth}
+\RequirePackage{calc}
+
+\newenvironment{framedhscode}%
+  {\parskip=\abovedisplayskip\par\noindent
+   \hscodestyle
+   \arrayrulewidth=\codeframewidth
+   \tabular{@{}|p{\linewidth-2\arraycolsep-2\arrayrulewidth-2pt}|@{}}%
+   \hline\framedhslinecorrect\\{-1.5ex}%
+   \let\endoflinesave=\\
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \framedhslinecorrect\endoflinesave{.5ex}\hline
+   \endtabular
+   \parskip=\belowdisplayskip\par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\framedhslinecorrect}[2]%
+  {#1[#2]}
+
+\newcommand{\framedhs}{\sethscode{framedhscode}}
+
+% The inlinehscode environment is an experimental environment
+% that can be used to typeset displayed code inline.
+
+\newenvironment{inlinehscode}%
+  {\(\def\column##1##2{}%
+   \let\>\undefined\let\<\undefined\let\\\undefined
+   \newcommand\>[1][]{}\newcommand\<[1][]{}\newcommand\\[1][]{}%
+   \def\fromto##1##2##3{##3}%
+   \def\nextline{}}{\) }%
+
+\newcommand{\inlinehs}{\sethscode{inlinehscode}}
+
+% The joincode environment is a separate environment that
+% can be used to surround and thereby connect multiple code
+% blocks.
+
+\newenvironment{joincode}%
+  {\let\orighscode=\hscode
+   \let\origendhscode=\endhscode
+   \def\endhscode{\def\hscode{\endgroup\def\@currenvir{hscode}\\}\begingroup}
+   %\let\SaveRestoreHook=\empty
+   %\let\ColumnHook=\empty
+   %\let\resethooks=\empty
+   \orighscode\def\hscode{\endgroup\def\@currenvir{hscode}}}%
+  {\origendhscode
+   \global\let\hscode=\orighscode
+   \global\let\endhscode=\origendhscode}%
+
+\makeatother
+\EndFmtInput
+%
+
+
+%------------------------------------------------------------------------------%
+
+
+%====== DEFINIR GRUPO E ELEMENTOS =============================================%
+
+\group{G99}
+\studentA{xxxxxx}{Nome }
+\studentB{xxxxxx}{Nome }
+\studentC{xxxxxx}{Nome }
+
+%==============================================================================%
+
+\begin{document}
+
+\sffamily
+\setlength{\parindent}{0em}
+\emergencystretch 3em
+\renewcommand{\baselinestretch}{1.25} 
+\input{Cover}
+\pagestyle{pagestyle}
+\setlength{\parindent}{1em}
+\newgeometry{left=25mm,right=20mm,top=25mm,bottom=25mm}
+
+\section*{Preâmbulo}
+
+Em \CP\ pretende-se ensinar a progra\-mação de computadores como uma disciplina
+científica. Para isso parte-se de um repertório de \emph{combinadores} que
+formam uma álgebra da programação % (conjunto de leis universais e seus corolários)
+e usam-se esses combinadores para construir programas \emph{composicionalmente},
+isto é, agregando programas já existentes.
+
+Na sequência pedagógica dos planos de estudo dos cursos que têm esta disciplina,
+opta-se pela aplicação deste método à programação em \Haskell\ (sem prejuízo
+da sua aplicação a outras linguagens funcionais). Assim, o presente trabalho
+prático coloca os alunos perante problemas concretos que deverão ser implementados
+em \Haskell. Há ainda um outro objectivo: o de ensinar a documentar programas,
+a validá-los e a produzir textos técnico-científicos de qualidade.
+
+Antes de abordarem os problemas propostos no trabalho, os grupos devem ler
+com atenção o anexo \ref{sec:documentacao} onde encontrarão as instruções
+relativas ao \emph{software} a instalar, etc.
+
+Valoriza-se a escrita de \emph{pouco} código que corresponda a soluções simples
+e elegantes que utilizem os combinadores de ordem superior estudados na disciplina.
+
+
+\Problema
+
+Esta questão aborda um problema que é conhecido pela designação '\emph{H-index of a Histogram}'
+e que se formula facilmente:
+\begin{quote}\em
+O h-index de um histograma é o maior número \ensuremath{\Varid{n}} de barras do histograma cuja altura é maior ou igual a \ensuremath{\Varid{n}}.
+\end{quote}
+Por exemplo, o histograma 
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{h}\mathrel{=}[\mskip1.5mu \mathrm{5},\mathrm{2},\mathrm{7},\mathrm{1},\mathrm{8},\mathrm{6},\mathrm{4},\mathrm{9}\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+que se mostra na figura
+	\histograma
+tem \ensuremath{\Varid{hindex}\;\Varid{h}\mathrel{=}\mathrm{5}}
+pois há \ensuremath{\mathrm{6}} colunas maiores que \ensuremath{\mathrm{5}}. (Não é \ensuremath{\mathrm{6}} pois maiores ou iguais que seis só há quatro.)
+
+Pretende-se definida como um catamorfismo, anamorfismo ou hilomorfismo uma função em Haskell
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{hindex}\mathbin{::}[\mskip1.5mu \Conid{Int}\mskip1.5mu]\to (\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+tal que, para \ensuremath{(\Varid{i},\Varid{x})\mathrel{=}\Varid{hindex}\;\Varid{h}}, \ensuremath{\Varid{i}} é o H-index de \ensuremath{\Varid{h}} e \ensuremath{\Varid{x}} é a lista de colunas de \ensuremath{\Varid{h}} que para ele contribuem.
+
+A proposta de \ensuremath{\Varid{hindex}} deverá vir acompanhada de um \textbf{diagrama} ilustrativo.
+
+\Problema
+
+Pelo \href{https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic}{teorema
+fundamental da aritmética}, todo número inteiro positivo tem uma única factorização
+prima.  For exemplo,
+\begin{tabbing}\ttfamily
+~primes~455\\
+\ttfamily ~\char91{}5\char44{}7\char44{}13\char93{}\\
+\ttfamily ~primes~433\\
+\ttfamily ~\char91{}433\char93{}\\
+\ttfamily ~primes~230\\
+\ttfamily ~\char91{}2\char44{}5\char44{}23\char93{}
+\end{tabbing}
+
+\begin{enumerate}
+
+\item	
+Implemente como anamorfismo de listas a função
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{primes}\mathbin{::}\mathbb{Z}\to [\mskip1.5mu \mathbb{Z}\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+que deverá, recebendo um número inteiro positivo, devolver a respectiva lista
+de factores primos.
+
+A proposta de \ensuremath{\Varid{primes}} deverá vir acaompanhada de um \textbf{diagrama} ilustrativo.
+
+\item A figura mostra a ``\emph{árvore dos primos}'' dos números \ensuremath{[\mskip1.5mu \mathrm{455},\mathrm{669},\mathrm{6645},\mathrm{34},\mathrm{12},\mathrm{2}\mskip1.5mu]}.
+
+      \primes
+
+Com base na alínea anterior, implemente uma função em Haskell que faça a
+geração de uma tal árvore a partir de uma lista de inteiros:
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{prime\char95 tree}\mathbin{::}[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\to \Conid{Exp}\;\mathbb{Z}\;\mathbb{Z}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\textbf{Sugestão}: escreva o mínimo de código possível em \ensuremath{\Varid{prime\char95 tree}} investigando
+cuidadosamente que funções disponíveis nas bibliotecas que são dadas podem
+ser reutilizadas.%
+\footnote{Pense sempre na sua produtividade quando está a programar --- essa
+atitude será valorizada por qualquer empregador que vier a ter.}
+
+\end{enumerate}
+
+\Problema
+
+\begin{center}
+\fbox{A fornecer na segunda edição deste enunciado}
+\end{center}
+
+\Problema
+
+\begin{center}
+\fbox{A fornecer na segunda edição deste enunciado}
+\end{center}
+
+\newpage
+\part*{Anexos}
+
+\appendix
+
+\section{Natureza do trabalho a realizar}
+\label{sec:documentacao}
+Este trabalho teórico-prático deve ser realizado por grupos de 3 alunos.
+Os detalhes da avaliação (datas para submissão do relatório e sua defesa
+oral) são os que forem publicados na \cp{página da disciplina} na \emph{internet}.
+
+Recomenda-se uma abordagem participativa dos membros do grupo em \textbf{todos}
+os exercícios do trabalho, para assim poderem responder a qualquer questão
+colocada na \emph{defesa oral} do relatório.
+
+Para cumprir de forma integrada os objectivos do trabalho vamos recorrer
+a uma técnica de programa\-ção dita ``\litp{literária}'' \cite{Kn92}, cujo
+princípio base é o seguinte:
+%
+\begin{quote}\em
+	Um programa e a sua documentação devem coincidir.
+\end{quote}
+%
+Por outras palavras, o \textbf{código fonte} e a \textbf{documentação} de um
+programa deverão estar no mesmo ficheiro.
+
+O ficheiro \texttt{cp2425t.pdf} que está a ler é já um exemplo de
+\litp{programação literária}: foi gerado a partir do texto fonte
+\texttt{cp2425t.lhs}\footnote{O sufixo `lhs' quer dizer
+\emph{\lhaskell{literate Haskell}}.} que encontrará no \MaterialPedagogico\
+desta disciplina des\-com\-pactando o ficheiro \texttt{cp2425t.zip}.
+
+Como se mostra no esquema abaixo, de um único ficheiro (\ensuremath{\Varid{lhs}})
+gera-se um PDF ou faz-se a interpretação do código \Haskell\ que ele inclui:
+
+	\esquema
+
+Vê-se assim que, para além do \GHCi, serão necessários os executáveis \PdfLatex\ e
+\LhsToTeX. Para facilitar a instalação e evitar problemas de versões e
+conflitos com sistemas operativos, é recomendado o uso do \Docker\ tal como
+a seguir se descreve.
+
+\section{Docker} \label{sec:docker}
+
+Recomenda-se o uso do \container\ cuja imagem é gerada pelo \Docker\ a partir do ficheiro
+\texttt{Dockerfile} que se encontra na diretoria que resulta de descompactar
+\texttt{cp2425t.zip}. Este \container\ deverá ser usado na execução
+do \GHCi\ e dos comandos relativos ao \Latex. (Ver também a \texttt{Makefile}
+que é disponibilizada.)
+
+Após \href{https://docs.docker.com/engine/install/}{instalar o Docker} e
+descarregar o referido zip com o código fonte do trabalho,
+basta executar os seguintes comandos:
+\begin{Verbatim}[fontsize=\small]
+    $ docker build -t cp2425t .
+    $ docker run -v ${PWD}:/cp2425t -it cp2425t
+\end{Verbatim}
+\textbf{NB}: O objetivo é que o container\ seja usado \emph{apenas} 
+para executar o \GHCi\ e os comandos relativos ao \Latex.
+Deste modo, é criado um \textit{volume} (cf.\ a opção \texttt{-v \$\{PWD\}:/cp2425t}) 
+que permite que a diretoria em que se encontra na sua máquina local 
+e a diretoria \texttt{/cp2425t} no \container\ sejam partilhadas.
+
+Pretende-se então que visualize/edite os ficheiros na sua máquina local e que
+os compile no \container, executando:
+\begin{Verbatim}[fontsize=\small]
+    $ lhs2TeX cp2425t.lhs > cp2425t.tex
+    $ pdflatex cp2425t
+\end{Verbatim}
+\LhsToTeX\ é o pre-processador que faz ``pretty printing'' de código Haskell
+em \Latex\ e que faz parte já do \container. Alternativamente, basta executar
+\begin{Verbatim}[fontsize=\small]
+    $ make
+\end{Verbatim}
+para obter o mesmo efeito que acima.
+
+Por outro lado, o mesmo ficheiro \texttt{cp2425t.lhs} é executável e contém
+o ``kit'' básico, escrito em \Haskell, para realizar o trabalho. Basta executar
+\begin{Verbatim}[fontsize=\small]
+    $ ghci cp2425t.lhs
+\end{Verbatim}
+
+\noindent Abra o ficheiro \texttt{cp2425t.lhs} no seu editor de texto preferido
+e verifique que assim é: todo o texto que se encontra dentro do ambiente
+\begin{quote}\small\tt
+\text{\ttfamily \char92{}begin\char123{}code\char125{}}
+\\ ... \\
+\text{\ttfamily \char92{}end\char123{}code\char125{}}
+\end{quote}
+é seleccionado pelo \GHCi\ para ser executado.
+
+\section{Em que consiste o TP}
+
+Em que consiste, então, o \emph{relatório} a que se referiu acima?
+É a edição do texto que está a ser lido, preenchendo o anexo \ref{sec:resolucao}
+com as respostas. O relatório deverá conter ainda a identificação dos membros
+do grupo de trabalho, no local respectivo da folha de rosto.
+
+Para gerar o PDF integral do relatório deve-se ainda correr os comando seguintes,
+que actualizam a bibliografia (com \Bibtex) e o índice remissivo (com \Makeindex),
+\begin{Verbatim}[fontsize=\small]
+    $ bibtex cp2425t.aux
+    $ makeindex cp2425t.idx
+\end{Verbatim}
+e recompilar o texto como acima se indicou. (Como já se disse, pode fazê-lo
+correndo simplesmente \texttt{make} no \container.)
+
+No anexo \ref{sec:codigo} disponibiliza-se algum código \Haskell\ relativo
+aos problemas que são colocados. Esse anexo deverá ser consultado e analisado
+à medida que isso for necessário.
+
+Deve ser feito uso da \litp{programação literária} para documentar bem o código que se
+desenvolver, em particular fazendo diagramas explicativos do que foi feito e
+tal como se explica no anexo \ref{sec:diagramas} que se segue.
+
+\section{Como exprimir cálculos e diagramas em LaTeX/lhs2TeX} \label{sec:diagramas}
+
+Como primeiro exemplo, estudar o texto fonte (\lhstotex{lhs}) do que está a ler\footnote{
+Procure e.g.\ por \texttt{"sec:diagramas"}.} onde se obtém o efeito seguinte:\footnote{Exemplos
+tirados de \cite{Ol05}.}
+\begin{eqnarray*}
+\start
+\ensuremath{\Varid{id}\mathrel{=}\conj{\Varid{f}}{\Varid{g}}}
+\just\equiv{ universal property }
+\ensuremath{\begin{lcbr}\p1\comp \Varid{id}\mathrel{=}\Varid{f}\\\p2\comp \Varid{id}\mathrel{=}\Varid{g}\end{lcbr}}
+\just\equiv{ identity }
+\ensuremath{\begin{lcbr}\p1\mathrel{=}\Varid{f}\\\p2\mathrel{=}\Varid{g}\end{lcbr}}
+\qed
+\end{eqnarray*}
+
+Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por exemplo:
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\N_0}
+           \ar[d]_-{\ensuremath{\cataNat{\Varid{g}}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\N_0}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}\cataNat{\Varid{g}}}}
+           \ar[l]_-{\ensuremath{\mathsf{in}}}
+\\
+     \ensuremath{\Conid{B}}
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\Conid{B}}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+
+\section{Código fornecido}\label{sec:codigo}
+
+\subsection*{Problema 1}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{h}\mathbin{::}[\mskip1.5mu \Conid{Int}\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+%----------------- Soluções dos alunos -----------------------------------------%
+
+\section{Soluções dos alunos}\label{sec:resolucao}
+Os alunos devem colocar neste anexo as suas soluções para os exercícios
+propostos, de acordo com o ``layout'' que se fornece.
+Não podem ser alterados os nomes ou tipos das funções dadas, mas pode ser
+adicionado texto ao anexo, bem como diagramas e/ou outras funções auxiliares
+que sejam necessárias.
+
+\noindent
+\textbf{Importante}: Não pode ser alterado o texto deste ficheiro fora deste anexo.
+
+\subsection*{Problema 1}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{hindex}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Problema 2}
+Primeira parte:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{primes}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Segunda parte:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{prime\char95 tree}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+%----------------- Índice remissivo (exige makeindex) -------------------------%
+
+\printindex
+
+%----------------- Bibliografia (exige bibtex) --------------------------------%
+
+\bibliographystyle{plain}
+\bibliography{cp2425t}
+
+%----------------- Fim do documento -------------------------------------------%
+\end{document}
