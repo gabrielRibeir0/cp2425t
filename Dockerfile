@@ -24,4 +24,4 @@ RUN . ~/.ghcup/env && \
     cabal install --lib process && \
     cabal install --lib split
 
-WORKDIR /cp2324t
+WORKDIR /cp2425t

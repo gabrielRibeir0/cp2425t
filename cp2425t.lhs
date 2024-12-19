@@ -113,6 +113,7 @@
 %format (cata' (f) (g)) = "\llparenthesis\, " f "\:" g "\,\rrparenthesis"
 %format (ana' (f) (g)) = "\lanabracket\;\!" f "\:" g "\:\!\ranabracket"
 %format (hylo' (ft) (ff) (gt) (gf)) = "\llbracket\, " ft "\:" ff ",\," gt "\:" gf "\,\rrbracket"
+%format .* = "\star " 
 %------------------------------------------------------------------------------%
 
 
@@ -176,6 +177,7 @@ import Control.Monad
 import Control.Applicative hiding ((<|>))
 import System.Process
 import Data.Char
+import Data.Ratio
 import Control.Concurrent
 
 main = undefined
@@ -196,7 +198,7 @@ h = [5,2,7,1,8,6,4,9]
 que se mostra na figura
 	\histograma
 tem |hindex h = 5|
-pois há |6| colunas maiores que |5|. (Não é |6| pois maiores ou iguais que seis só há quatro.)
+pois há |5| colunas maiores que |5|. (Não é |6| pois maiores ou iguais que seis só há quatro.)
 
 Pretende-se definida como um catamorfismo, anamorfismo ou hilomorfismo uma função em Haskell
 \begin{code}
@@ -230,7 +232,7 @@ primes :: Integer -> [Integer]
 que deverá, recebendo um número inteiro positivo, devolver a respectiva lista
 de factores primos.
 
-A proposta de |primes| deverá vir acaompanhada de um \textbf{diagrama} ilustrativo.
+A proposta de |primes| deverá vir acompanhada de um \textbf{diagrama} ilustrativo.
 
 \item A figura mostra a ``\emph{árvore dos primos}'' dos números |[455,669,6645,34,12,2]|.
 
@@ -253,17 +255,115 @@ atitude será valorizada por qualquer empregador que vier a ter.}
 
 \Problema
 
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+A convolução |a .* b| de duas listas |a| e |b| --- uma operação relevante em computação
+---  está muito bem explicada
+\href{https://www.youtube.com/watch?v=KuXjwB4LzSA}{neste vídeo} do canal
+\textbf{3Blue1Brown} do YouTube,
+a partir de \href{https://www.youtube.com/watch?v=KuXjwB4LzSA&t=390s}{|t=6:30|}.
+Aí se mostra como, por exemplo:
+\begin{quote}
+|[1,2,3] .* [4,5,6] = [4,13,28,27,18]| 
+\end{quote}
+A solução abaixo, proposta pelo chatGPT,
+\begin{spec}
+convolve :: Num a => [a] -> [a] -> [a]
+convolve xs ys = [sum $ zipWith (*) (take n (drop i xs)) ys | i <- [0..(length xs - n)]]
+  where n = length ys 
+\end{spec}
+está manifestamente errada, pois |convolve [1,2,3] [4,5,6] = [32]| (!).
+
+Proponha, explicando-a devidamente, uma solução sua para |convolve|.
+Valorizar-se-á a economia de código e o recurso aos combinadores \emph{pointfree} estudados
+na disciplina, em particular a triologia \emph{ana-cata-hilo} de tipos disponíveis nas
+bibliotecas dadas ou a definir.
 
 \Problema
 
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+Considere-se a seguinte sintaxe (abstrata e simplificada) para \textbf{expressões numéricas} (em |b|) com variáveis (em |a|),
+\begin{code}
+data Expr b a =   V a | N b | T Op [ Expr b a ]  deriving (Show,Eq)
 
-\newpage
+data Op = ITE | Add | Mul | Suc deriving (Show,Eq)
+\end{code}
+possivelmente condicionais (cf.\ |ITE|, i.e.\ o operador condicional ``if-then-else``).
+Por exemplo, a árvore mostrada a seguir
+        \treeA
+representa a expressão
+\begin{eqnarray}
+        |ite (V "x") (N 0) (multi (V "y") (soma (N 3) (V "y")))|
+        \label{eq:expr}
+\end{eqnarray}
+--- i.e.\ |if x then 0 else y*(3+y)| ---
+assumindo as ``helper functions'':
+\begin{code}
+soma  x y = T Add [x,y]
+multi x y = T Mul [x,y]
+ite x y z = T ITE [x,y,z]
+\end{code}
+
+No anexo \ref{sec:codigo} propôe-se uma base para o tipo Expr (|baseExpr|) e a 
+correspondente algebra |inExpr| para construção do tipo |Expr|.
+
+\begin{enumerate}
+\item        Complete as restantes definições da biblioteca |Expr|  pedidas no anexo \ref{sec:resolucao}.
+\item        No mesmo anexo, declare |Expr b| como instância da classe |Monad|. \textbf{Sugestão}: relembre os exercícios da ficha 12.
+\item        Defina como um catamorfismo de |Expr| a sua versão monádia, que deverá ter o tipo:
+\begin{code}
+mcataExpr :: Monad m => (Either a (Either b (Op, m [c])) -> m c) -> Expr b a -> m c
+\end{code}
+\item        Para se avaliar uma expressão é preciso que todas as suas variáveis estejam instanciadas.
+Complete a definição da função
+\begin{code}
+let_exp :: (Num c) => (a -> Expr c b) -> Expr c a -> Expr c b
+\end{code}
+que, dada uma expressão com variáveis em |a| e uma função que a cada uma dessas variáveis atribui uma
+expressão (|a -> Expr c b|), faz a correspondente substituição.\footnote{Cf.\ expressões |let ... in ...|.}
+Por exemplo, dada
+\begin{code}
+f "x" = N 0
+f "y" = N 5
+f _   = N 99
+\end{code}
+ter-se-á
+\begin{spec}
+        let_exp f e = T ITE [N 1,N 0,T Mul [N 5,T Add [N 3,N 1]]]
+\end{spec}
+isto é, a árvore da figura a seguir: 
+        \treeB
+
+\item Finalmente, defina a função de avaliação de uma expressão, com tipo
+
+\begin{code}
+evaluate :: (Num a, Ord a) =>  Expr a b -> Maybe a
+\end{code}
+
+que deverá ter em conta as seguintes situações de erro:
+
+\begin{enumerate}
+
+\item \emph{Variáveis} --- para ser avaliada, |x| em |evaluate x| não pode conter variáveis. Assim, por exemplo,
+        \begin{spec}
+        evaluate e = Nothing
+        evaluate (let_exp f e) = Just 40
+        \end{spec}
+para |f| e |e|  dadas acima.
+
+\item \emph{Aridades} --- todas as ocorrências dos operadores deverão ter
+      o devido número de sub-expressões, por exemplo:
+        \begin{spec}
+        evaluate (T Add [ N 2, N 3]) = Just 5
+        evaluate (T Mul [ N 2 ]) = Nothing
+        \end{spec}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\noindent
+\textbf{Sugestão}: de novo se insiste na escrita do mínimo de código possível,
+tirando partido da riqueza estrutural do tipo |Expr| que é assunto desta questão.
+Sugere-se também o recurso a diagramas para explicar as soluções propostas.
+
 \part*{Anexos}
 
 \appendix
@@ -382,7 +482,7 @@ tal como se explica no anexo \ref{sec:diagramas} que se segue.
 
 Como primeiro exemplo, estudar o texto fonte (\lhstotex{lhs}) do que está a ler\footnote{
 Procure e.g.\ por \texttt{"sec:diagramas"}.} onde se obtém o efeito seguinte:\footnote{Exemplos
-tirados de \cite{Ol05}.}
+tirados de \cite{Ol18}.}
 \begin{eqnarray*}
 \start
 |
@@ -432,6 +532,24 @@ Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por ex
 h :: [Int]
 \end{code}
 
+\subsection*{Problema 4}
+Definição do tipo:
+\begin{code}
+inExpr = either V (either N (uncurry T))
+
+baseExpr g h f = g -|- (h -|- id >< map f)
+\end{code}
+Exemplos de expressões:
+\begin{code}
+e = ite (V "x") (N 0) (multi (V "y") (soma (N 3) (V "y")))
+i = ite (V "x") (N 1) (multi (V "y") (soma (N (3%5)) (V "y")))
+\end{code}
+Exemplo de teste:
+\begin{code}
+teste = evaluate (let_exp f i) == Just (26 % 245)
+    where f "x" = N 0 ; f "y" = N (1%7)
+\end{code}
+
 %----------------- Soluções dos alunos -----------------------------------------%
 
 \section{Soluções dos alunos}\label{sec:resolucao}
@@ -458,6 +576,43 @@ primes = undefined
 Segunda parte:
 \begin{code}
 prime_tree = undefined
+\end{code}
+
+\subsection*{Problema 3}
+
+\begin{code}
+convolve :: Num a => [a] -> [a] -> [a]
+convolve = undefined
+\end{code}
+
+\subsection*{Problema 4}
+Definição do tipo:
+\begin{code}
+outExpr = undefined
+
+recExpr = undefined
+\end{code}
+\emph{Ana + cata + hylo}:
+\begin{code}
+cataExpr g = undefined
+
+anaExpr g = undefined
+                
+hyloExpr h g = undefined
+\end{code}
+\emph{Maps}:
+\emph{Monad}:
+\emph{Let expressions}:
+\begin{code}
+let_exp = undefined
+\end{code}
+Catamorfismo monádico:
+\begin{code}
+mcataExpr g = undefined
+\end{code}
+Avaliação de expressões:
+\begin{code}
+evaluate = undefined
 \end{code}
 
 %----------------- Índice remissivo (exige makeindex) -------------------------%
