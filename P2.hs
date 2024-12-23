@@ -12,7 +12,7 @@ isPrime n | n < 2     = False
     where isqrt = floor . sqrt . fromIntegral
 
 nextPrimeFactor :: Int -> Int
-nextPrimeFactor n = head [x | x <- [2..n], isPrime x && mod n x == 0]
+nextPrimeFactor n = head [x | x <- 2:[3,5..n], mod n x == 0 && isPrime x]
 
 divide :: Int -> Int
 divide n = div n (nextPrimeFactor n)
