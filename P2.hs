@@ -15,9 +15,8 @@ divisorsList :: Int -> [Int]
 divisorsList n = [x | x <- [2..isqrt n], mod n x == 0]
     where isqrt = floor . sqrt . fromIntegral
 
--- either true false . outList = null
-isPrime :: Int -> Bool
-isPrime = either false (either true false . outList . divisorsList) . outPrimes
+isPrime :: Int -> Bool 
+isPrime = either false (null . divisorsList) . outPrimes
 
 nextPrimeFactor :: Int -> Int
 nextPrimeFactor n = head [x | x <- 2:[3,5..n], mod n x == 0 && isPrime x]
@@ -36,4 +35,13 @@ subTree (p, ns)
                                q <- nub $ concatMap (primes . flip div p) ns])
 
 prime_tree :: [Int] -> Exp Int Int
-prime_tree nums = Term 1 (map subTree (groupPrimes nums))    
+--prime_tree nums = Term 1 (map subTree (groupPrimes nums)) 
+prime_tree = hyloList cata ana
+
+--[n, n1, ...] -> [(n, primes n), (n1, primes n1), ...]
+ana :: [Int] -> Either () ([[Int]], [Int])
+ana = (id -|- split (map primes . cons) id) . outList
+
+cata :: Either () ([[Int]], Exp Int Int) -> Exp Int Int
+cata 
+

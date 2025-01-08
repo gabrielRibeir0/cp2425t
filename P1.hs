@@ -14,6 +14,6 @@ pp2 = uncurry (<=) . split (p1.p2) (length.p2.p2)
 f :: Either () ((Int, [Int]), (Int, [Int])) -> (Int, [Int])
 f = either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)
 
-hIndex :: [Int] -> (Int,[Int])
-hIndex = hyloList f g
+hindex :: [Int] -> (Int,[Int])
+hindex = hyloList f g
 
