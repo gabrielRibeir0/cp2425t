@@ -1,6 +1,5 @@
 import Cp
 import List
-import Data.Maybe
 
 --ana
 g :: [Int] -> Either () ((Int, [Int]), [Int])
@@ -16,4 +15,3 @@ f = either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)
 
 hindex :: [Int] -> (Int,[Int])
 hindex = hyloList f g
-
