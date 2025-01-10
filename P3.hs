@@ -1,5 +1,6 @@
 import Cp
 import List
+import Data.List
 
 --map pode ser um catamorfismo
 createRow :: Num a => [a] -> a -> [a]
@@ -29,3 +30,8 @@ sumDiagonals = cataList (either nil (cons . (sum >< id)))
 --sumDiagonals = map sum
 convolve :: Num a => [a] -> [a] -> [a]
 convolve l1 = sumDiagonals . diagonals . createMatrix l1
+
+
+convolve2 :: Num a => [a] -> [a] -> [a]
+convolve2 hs = map (sum . zipWith (*) (reverse hs)) . init . tails . (++) pad
+  where pad = replicate (length hs - 1) 0
