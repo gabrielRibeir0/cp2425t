@@ -14,9 +14,9 @@ data Expr b a = V a
                 | T Op [Expr b a]
                 deriving (Show,Eq)
 
-soma x y = T Add [x, y ]
-multi x y = T Mul [x, y ]
-ite x y z = T ITE [x, y, z ]
+soma x y = T Add [x, y]
+multi x y = T Mul [x, y]
+ite x y z = T ITE [x, y, z]
 
 inExpr :: Either a (Either b (Op, [Expr b a])) -> Expr b a
 inExpr = either V (either N (uncurry T))
@@ -74,8 +74,17 @@ let_exp f (T op l) = T op (map (let_exp f) l)
 
 
 --avaliacao de expressoes
-evaluate :: (Num a, Ord a) ⇒ Expr a b → Maybe a
-evaluate
+evaluate :: (Num a, Ord a) => Expr a b -> Maybe a
+evaluate = cataExpr eval 
+
+eval :: (Num a, Ord a) => Either b (Either a (Op, [Maybe a])) -> Maybe a
+eval (Left _) = Nothing
+eval (Right (Left n)) = Just n
+eval (Right (Right (op, vals))) = case (op, sequence vals) of
+    (Add, Just [x, y]) -> Just (x + y)  
+    (Mul, Just [x, y]) -> Just (x * y)
+    (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
+    _ -> Nothing
 
 
 
