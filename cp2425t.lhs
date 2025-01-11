@@ -120,9 +120,9 @@
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
 \group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\studentA{103993}{Júlia Bughi Corrêa da Costa }
+\studentB{104171}{Gabriel Pereira Ribeiro }
+\studentC{104613}{Luís Pinto da Cunha }
 
 %==============================================================================%
 

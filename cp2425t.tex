@@ -270,9 +270,9 @@
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
 \group{G99}
-\studentA{xxxxxx}{Nome }
-\studentB{xxxxxx}{Nome }
-\studentC{xxxxxx}{Nome }
+\studentA{103993}{Júlia Bughi Corrêa da Costa }
+\studentB{104171}{Gabriel Pereira Ribeiro }
+\studentC{104613}{Luís Pinto da Cunha }
 
 %==============================================================================%
 
@@ -759,12 +759,12 @@ que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{18}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{19}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{gcata}\mathbin{::}[\mskip1.5mu \Conid{Int}\mskip1.5mu]\to ()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
+\>[B]{}\Varid{divide}\mathbin{::}[\mskip1.5mu \Conid{Int}\mskip1.5mu]\to ()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
 \\
-\>[B]{}\Varid{gcata}\mathrel{=}(\Varid{id}+{}\<[18]%
-\>[18]{}(\conj{\conj{\Varid{head}}{\Varid{id}}}{\Varid{tail}}\comp \Varid{cons}))\comp \Varid{outList}\comp \Varid{iSort}{}\<[E]%
+\>[B]{}\Varid{divide}\mathrel{=}(\Varid{id}+{}\<[19]%
+\>[19]{}(\conj{\conj{\Varid{head}}{\Varid{id}}}{\Varid{tail}}\comp \Varid{cons}))\comp \Varid{outList}\comp \Varid{iSort}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \begin{hscode}\SaveRestoreHook
@@ -777,18 +777,16 @@ que sejam necessárias.
 \end{hscode}\resethooks
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{fcata}\mathbin{::}()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),(\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]))\to (\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
+\>[B]{}\Varid{conquer}\mathbin{::}()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),(\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]))\to (\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
 \\
-\>[B]{}\Varid{fcata}\mathrel{=}\alt{{}\<[21]%
-\>[21]{}\conj{\underline{\mathrm{0}}}{\Varid{nil}}}{\Varid{cond}\;(\uncurry{(\mathrel{\wedge})}\comp \conj{\Varid{pp1}}{\Varid{pp2}})\;\p2\;\p1}{}\<[E]%
+\>[B]{}\Varid{conquer}\mathrel{=}\alt{\conj{\underline{\mathrm{0}}}{\Varid{nil}}}{\Varid{cond}\;(\uncurry{(\mathrel{\wedge})}\comp \conj{\Varid{pp1}}{\Varid{pp2}})\;\p2\;\p1}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{hindex}\mathrel{=}\Varid{hyloList}\;\Varid{fcata}\;\Varid{gcata}{}\<[E]%
+\>[B]{}\Varid{hindex}\mathrel{=}\Varid{hyloList}\;\Varid{conquer}\;\Varid{divide}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

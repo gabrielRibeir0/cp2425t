@@ -1,7 +1,6 @@
 import Cp 
 import St 
 
-
 data Op = ITE 
         | Add 
         | Mul 
@@ -21,15 +20,12 @@ ite x y z = T ITE [x, y, z]
 inExpr :: Either a (Either b (Op, [Expr b a])) -> Expr b a
 inExpr = either V (either N (uncurry T))
 
-
 outExpr :: Expr a1 a2 -> Either a2 (Either a1 (Op, [Expr a1 a2]))
 outExpr(V a) = i1 a
 outExpr(N b) = i2 (i1 b)
 outExpr(T op l) = i2 (i2 (op,l))
 
-
 baseExpr g h f = g -|- (h -|- id >< map f)
-
 
 recExpr f = baseExpr id id  f
 
@@ -71,8 +67,6 @@ let_exp f (V x) = f x
 let_exp _ (N n) = N n
 let_exp f (T op l) = T op (map (let_exp f) l) 
 
-
-
 --avaliacao de expressoes
 evaluate :: (Num a, Ord a) => Expr a b -> Maybe a
 evaluate = cataExpr eval 
@@ -85,10 +79,5 @@ eval (Right (Right (op, vals))) = case (op, sequence vals) of
     (Mul, Just [x, y]) -> Just (x * y)
     (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
     _ -> Nothing
-
-
-
-
-
 
 
