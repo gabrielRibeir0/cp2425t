@@ -1,43 +1,77 @@
-\indexentry{C\IeC {\'a}lculo de Programas|hyperpage}{1}
+\indexentry{Cálculo de Programas|hyperpage}{1}
 \indexentry{Haskell|hyperpage}{1}
 \indexentry{Haskell|hyperpage}{1}
-\indexentry{C\IeC {\'a}lculo de Programas|hyperpage}{4}
-\indexentry{Programa\IeC {\c c}\IeC {\~a}o!liter\IeC {\'a}ria|hyperpage}{4}
-\indexentry{Programa\IeC {\c c}\IeC {\~a}o!liter\IeC {\'a}ria|hyperpage}{4}
-\indexentry{C\IeC {\'a}lculo de Programas!Material Pedag\IeC {\'o}gico|hyperpage}{4}
-\indexentry{Haskell|hyperpage}{4}
-\indexentry{Haskell!interpretador!GHCi|hyperpage}{4}
-\indexentry{\LaTeX  !\texttt  {pdflatex}|hyperpage}{4}
-\indexentry{\LaTeX  !\texttt  {lhs2TeX}|hyperpage}{4}
-\indexentry{Docker|hyperpage}{4}
-\indexentry{Docker!container|hyperpage}{4}
-\indexentry{Docker|hyperpage}{4}
-\indexentry{Docker!container|hyperpage}{4}
-\indexentry{Haskell!interpretador!GHCi|hyperpage}{4}
-\indexentry{\LaTeX  |hyperpage}{4}
-\indexentry{Haskell!Literate Haskell|hyperpage}{4}
+\indexentry{Função!\emph  {length}|hyperpage}{3}
+\indexentry{Função!\emph  {length}|hyperpage}{3}
+\indexentry{Cálculo de Programas|hyperpage}{5}
+\indexentry{Programação!literária|hyperpage}{5}
+\indexentry{Programação!literária|hyperpage}{5}
+\indexentry{Cálculo de Programas!Material Pedagógico|hyperpage}{5}
+\indexentry{Haskell|hyperpage}{5}
 \indexentry{Haskell!interpretador!GHCi|hyperpage}{5}
-\indexentry{\LaTeX  |hyperpage}{5}
-\indexentry{Docker!container|hyperpage}{5}
-\indexentry{Docker!container|hyperpage}{5}
+\indexentry{\LaTeX  !\texttt  {pdflatex}|hyperpage}{5}
 \indexentry{\LaTeX  !\texttt  {lhs2TeX}|hyperpage}{5}
-\indexentry{\LaTeX  |hyperpage}{5}
+\indexentry{Docker|hyperpage}{5}
 \indexentry{Docker!container|hyperpage}{5}
-\indexentry{Haskell|hyperpage}{5}
+\indexentry{Docker|hyperpage}{5}
+\indexentry{Docker!container|hyperpage}{5}
 \indexentry{Haskell!interpretador!GHCi|hyperpage}{5}
-\indexentry{\LaTeX  !\texttt  {bibtex}|hyperpage}{5}
-\indexentry{\LaTeX  !\texttt  {makeindex}|hyperpage}{5}
-\indexentry{Docker!container|hyperpage}{5}
-\indexentry{Haskell|hyperpage}{5}
-\indexentry{Programa\IeC {\c c}\IeC {\~a}o!liter\IeC {\'a}ria|hyperpage}{5}
+\indexentry{\LaTeX  |hyperpage}{5}
+\indexentry{Haskell!Literate Haskell|hyperpage}{5}
+\indexentry{Haskell!interpretador!GHCi|hyperpage}{6}
+\indexentry{\LaTeX  |hyperpage}{6}
+\indexentry{Docker!container|hyperpage}{6}
+\indexentry{Docker!container|hyperpage}{6}
 \indexentry{\LaTeX  !\texttt  {lhs2TeX}|hyperpage}{6}
-\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{6}
-\indexentry{Fun\IeC {\c c}\IeC {\~a}o!$\pi _1$|hyperpage}{6}
-\indexentry{Fun\IeC {\c c}\IeC {\~a}o!$\pi _2$|hyperpage}{6}
-\indexentry{Fun\IeC {\c c}\IeC {\~a}o!$\pi _1$|hyperpage}{6}
-\indexentry{Fun\IeC {\c c}\IeC {\~a}o!$\pi _2$|hyperpage}{6}
-\indexentry{\LaTeX  !\texttt  {xymatrix}|hyperpage}{6}
-\indexentry{N\IeC {\'u}meros naturais ($\mathbb  {N}$)|hyperpage}{6}
-\indexentry{Combinador ``pointfree''!\emph  {cata}!Naturais|hyperpage}{6}
-\indexentry{N\IeC {\'u}meros naturais ($\mathbb  {N}$)|hyperpage}{6}
-\indexentry{Combinador ``pointfree''!\emph  {cata}!Naturais|hyperpage}{6}
+\indexentry{\LaTeX  |hyperpage}{6}
+\indexentry{Docker!container|hyperpage}{6}
+\indexentry{Haskell|hyperpage}{6}
+\indexentry{Haskell!interpretador!GHCi|hyperpage}{6}
+\indexentry{\LaTeX  !\texttt  {bibtex}|hyperpage}{6}
+\indexentry{\LaTeX  !\texttt  {makeindex}|hyperpage}{6}
+\indexentry{Docker!container|hyperpage}{6}
+\indexentry{Haskell|hyperpage}{6}
+\indexentry{Programação!literária|hyperpage}{7}
+\indexentry{\LaTeX  !\texttt  {lhs2TeX}|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{7}
+\indexentry{Função!$\pi _1$|hyperpage}{7}
+\indexentry{Função!$\pi _2$|hyperpage}{7}
+\indexentry{Função!$\pi _1$|hyperpage}{7}
+\indexentry{Função!$\pi _2$|hyperpage}{7}
+\indexentry{\LaTeX  !\texttt  {xymatrix}|hyperpage}{7}
+\indexentry{Números naturais ($\mathbb  {N}$)|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {cata}!Naturais|hyperpage}{7}
+\indexentry{Números naturais ($\mathbb  {N}$)|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {cata}!Naturais|hyperpage}{7}
+\indexentry{Função!\emph  {uncurry}|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{7}
+\indexentry{Função!\emph  {map}|hyperpage}{7}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Função!\emph  {uncurry}|hyperpage}{8}
+\indexentry{Função!$\pi _1$|hyperpage}{8}
+\indexentry{Função!$\pi _2$|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Função!\emph  {uncurry}|hyperpage}{8}
+\indexentry{Função!$\pi _1$|hyperpage}{8}
+\indexentry{Função!$\pi _2$|hyperpage}{8}
+\indexentry{Função!\emph  {length}|hyperpage}{8}
+\indexentry{Função!$\pi _2$|hyperpage}{8}
+\indexentry{Função!$\pi _2$|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Função!\emph  {uncurry}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Função!$\pi _2$|hyperpage}{8}
+\indexentry{Função!$\pi _1$|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {ana}!Listas|hyperpage}{8}
+\indexentry{Função!\emph  {map}|hyperpage}{8}
+\indexentry{Combinador ``pointfree''!\emph  {split}|hyperpage}{8}
+\indexentry{Função!\emph  {length}|hyperpage}{9}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{9}
+\indexentry{Combinador ``pointfree''!\emph  {cata}!Naturais|hyperpage}{9}
+\indexentry{Combinador ``pointfree''!\emph  {either}|hyperpage}{9}

@@ -327,7 +327,7 @@ Por exemplo, o histograma
 que se mostra na figura
 	\histograma
 tem \ensuremath{\Varid{hindex}\;\Varid{h}\mathrel{=}\mathrm{5}}
-pois há \ensuremath{\mathrm{6}} colunas maiores que \ensuremath{\mathrm{5}}. (Não é \ensuremath{\mathrm{6}} pois maiores ou iguais que seis só há quatro.)
+pois há \ensuremath{\mathrm{5}} colunas maiores que \ensuremath{\mathrm{5}}. (Não é \ensuremath{\mathrm{6}} pois maiores ou iguais que seis só há quatro.)
 
 Pretende-se definida como um catamorfismo, anamorfismo ou hilomorfismo uma função em Haskell
 \begin{hscode}\SaveRestoreHook
@@ -367,7 +367,7 @@ Implemente como anamorfismo de listas a função
 que deverá, recebendo um número inteiro positivo, devolver a respectiva lista
 de factores primos.
 
-A proposta de \ensuremath{\Varid{primes}} deverá vir acaompanhada de um \textbf{diagrama} ilustrativo.
+A proposta de \ensuremath{\Varid{primes}} deverá vir acompanhada de um \textbf{diagrama} ilustrativo.
 
 \item A figura mostra a ``\emph{árvore dos primos}'' dos números \ensuremath{[\mskip1.5mu \mathrm{455},\mathrm{669},\mathrm{6645},\mathrm{34},\mathrm{12},\mathrm{2}\mskip1.5mu]}.
 
@@ -393,17 +393,168 @@ atitude será valorizada por qualquer empregador que vier a ter.}
 
 \Problema
 
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+A convolução \ensuremath{\Varid{a}\star \Varid{b}} de duas listas \ensuremath{\Varid{a}} e \ensuremath{\Varid{b}} --- uma operação relevante em computação
+---  está muito bem explicada
+\href{https://www.youtube.com/watch?v=KuXjwB4LzSA}{neste vídeo} do canal
+\textbf{3Blue1Brown} do YouTube,
+a partir de \href{https://www.youtube.com/watch?v=KuXjwB4LzSA&t=390s}{\ensuremath{\Varid{t}\mathrel{=}\mathrm{6}\mathbin{:}\mathrm{30}}}.
+Aí se mostra como, por exemplo:
+\begin{quote}
+\ensuremath{[\mskip1.5mu \mathrm{1},\mathrm{2},\mathrm{3}\mskip1.5mu]\star [\mskip1.5mu \mathrm{4},\mathrm{5},\mathrm{6}\mskip1.5mu]\mathrel{=}[\mskip1.5mu \mathrm{4},\mathrm{13},\mathrm{28},\mathrm{27},\mathrm{18}\mskip1.5mu]} 
+\end{quote}
+A solução abaixo, proposta pelo chatGPT,
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{convolve}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{convolve}\;\Varid{xs}\;\Varid{ys}\mathrel{=}[\mskip1.5mu \Varid{sum}\mathbin{\$}\Varid{zipWith}\;(\mathbin{*})\;(\Varid{take}\;\Varid{n}\;(\Varid{drop}\;\Varid{i}\;\Varid{xs}))\;\Varid{ys}\mid \Varid{i}\leftarrow [\mskip1.5mu \mathrm{0}\mathinner{\ldotp\ldotp}(\length \;\Varid{xs}\mathbin{-}\Varid{n})\mskip1.5mu]\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{n}\mathrel{=}\length \;\Varid{ys}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+está manifestamente errada, pois \ensuremath{\Varid{convolve}\;[\mskip1.5mu \mathrm{1},\mathrm{2},\mathrm{3}\mskip1.5mu]\;[\mskip1.5mu \mathrm{4},\mathrm{5},\mathrm{6}\mskip1.5mu]\mathrel{=}[\mskip1.5mu \mathrm{32}\mskip1.5mu]} (!).
+
+Proponha, explicando-a devidamente, uma solução sua para \ensuremath{\Varid{convolve}}.
+Valorizar-se-á a economia de código e o recurso aos combinadores \emph{pointfree} estudados
+na disciplina, em particular a triologia \emph{ana-cata-hilo} de tipos disponíveis nas
+bibliotecas dadas ou a definir.
 
 \Problema
 
-\begin{center}
-\fbox{A fornecer na segunda edição deste enunciado}
-\end{center}
+Considere-se a seguinte sintaxe (abstrata e simplificada) para \textbf{expressões numéricas} (em \ensuremath{\Varid{b}}) com variáveis (em \ensuremath{\Varid{a}}),
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{19}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{50}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{data}\;\Conid{Expr}\;\Varid{b}\;\Varid{a}\mathrel{=}{}\<[19]%
+\>[19]{}\Conid{V}\;\Varid{a}\mid \Conid{N}\;\Varid{b}\mid \Conid{T}\;\Conid{Op}\;[\mskip1.5mu \Conid{Expr}\;\Varid{b}\;\Varid{a}\mskip1.5mu]\;{}\<[50]%
+\>[50]{}\mathbf{deriving}\;(\Conid{Show},\Conid{Eq}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{data}\;\Conid{Op}\mathrel{=}\Conid{ITE}\mid \Conid{Add}\mid \Conid{Mul}\mid \Conid{Suc}\;\mathbf{deriving}\;(\Conid{Show},\Conid{Eq}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+possivelmente condicionais (cf.\ \ensuremath{\Conid{ITE}}, i.e.\ o operador condicional ``if-then-else``).
+Por exemplo, a árvore mostrada a seguir
+        \treeA
+representa a expressão
+\begin{eqnarray}
+        \ensuremath{\Varid{ite}\;(\Conid{V}\;\text{\ttfamily \char34 x\char34})\;(\Conid{N}\;\mathrm{0})\;(\Varid{multi}\;(\Conid{V}\;\text{\ttfamily \char34 y\char34})\;(\Varid{soma}\;(\Conid{N}\;\mathrm{3})\;(\Conid{V}\;\text{\ttfamily \char34 y\char34})))}
+        \label{eq:expr}
+\end{eqnarray}
+--- i.e.\ \ensuremath{\mathbf{if}\;\Varid{x}\;\mathbf{then}\;\mathrm{0}\;\mathbf{else}\;\Varid{y}\mathbin{*}(\mathrm{3}\mathbin{+}\Varid{y})} ---
+assumindo as ``helper functions'':
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{7}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{soma}\;{}\<[7]%
+\>[7]{}\Varid{x}\;\Varid{y}\mathrel{=}\Conid{T}\;\Conid{Add}\;[\mskip1.5mu \Varid{x},\Varid{y}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{multi}\;\Varid{x}\;\Varid{y}\mathrel{=}\Conid{T}\;\Conid{Mul}\;[\mskip1.5mu \Varid{x},\Varid{y}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{ite}\;\Varid{x}\;\Varid{y}\;\Varid{z}\mathrel{=}\Conid{T}\;\Conid{ITE}\;[\mskip1.5mu \Varid{x},\Varid{y},\Varid{z}\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 
-\newpage
+No anexo \ref{sec:codigo} propôe-se uma base para o tipo Expr (\ensuremath{\Varid{baseExpr}}) e a 
+correspondente algebra \ensuremath{\Varid{inExpr}} para construção do tipo \ensuremath{\Conid{Expr}}.
+
+\begin{enumerate}
+\item        Complete as restantes definições da biblioteca \ensuremath{\Conid{Expr}}  pedidas no anexo \ref{sec:resolucao}.
+\item        No mesmo anexo, declare \ensuremath{\Conid{Expr}\;\Varid{b}} como instância da classe \ensuremath{\Conid{Monad}}. \textbf{Sugestão}: relembre os exercícios da ficha 12.
+\item        Defina como um catamorfismo de \ensuremath{\Conid{Expr}} a sua versão monádia, que deverá ter o tipo:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mcataExpr}\mathbin{::}\Conid{Monad}\;\Varid{m}\Rightarrow (\Varid{a}+(\Varid{b}+(\Conid{Op},\Varid{m}\;[\mskip1.5mu \Varid{c}\mskip1.5mu]))\to \Varid{m}\;\Varid{c})\to \Conid{Expr}\;\Varid{b}\;\Varid{a}\to \Varid{m}\;\Varid{c}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\item        Para se avaliar uma expressão é preciso que todas as suas variáveis estejam instanciadas.
+Complete a definição da função
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{let\char95 exp}\mathbin{::}(\Conid{Num}\;\Varid{c})\Rightarrow (\Varid{a}\to \Conid{Expr}\;\Varid{c}\;\Varid{b})\to \Conid{Expr}\;\Varid{c}\;\Varid{a}\to \Conid{Expr}\;\Varid{c}\;\Varid{b}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+que, dada uma expressão com variáveis em \ensuremath{\Varid{a}} e uma função que a cada uma dessas variáveis atribui uma
+expressão (\ensuremath{\Varid{a}\to \Conid{Expr}\;\Varid{c}\;\Varid{b}}), faz a correspondente substituição.\footnote{Cf.\ expressões \ensuremath{\mathbf{let}\mathbin{...}\mathbf{in}\mathbin{...}}.}
+Por exemplo, dada
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{7}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{f}\;\text{\ttfamily \char34 x\char34}\mathrel{=}\Conid{N}\;\mathrm{0}{}\<[E]%
+\\
+\>[B]{}\Varid{f}\;\text{\ttfamily \char34 y\char34}\mathrel{=}\Conid{N}\;\mathrm{5}{}\<[E]%
+\\
+\>[B]{}\Varid{f}\;\anonymous {}\<[7]%
+\>[7]{}\mathrel{=}\Conid{N}\;\mathrm{99}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+ter-se-á
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\Varid{let\char95 exp}\;\Varid{f}\;\Varid{e}\mathrel{=}\Conid{T}\;\Conid{ITE}\;[\mskip1.5mu \Conid{N}\;\mathrm{1},\Conid{N}\;\mathrm{0},\Conid{T}\;\Conid{Mul}\;[\mskip1.5mu \Conid{N}\;\mathrm{5},\Conid{T}\;\Conid{Add}\;[\mskip1.5mu \Conid{N}\;\mathrm{3},\Conid{N}\;\mathrm{1}\mskip1.5mu]\mskip1.5mu]\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+isto é, a árvore da figura a seguir: 
+        \treeB
+
+\item Finalmente, defina a função de avaliação de uma expressão, com tipo
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{32}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{evaluate}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Ord}\;\Varid{a})\Rightarrow {}\<[32]%
+\>[32]{}\Conid{Expr}\;\Varid{a}\;\Varid{b}\to \Conid{Maybe}\;\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+que deverá ter em conta as seguintes situações de erro:
+
+\begin{enumerate}
+
+\item \emph{Variáveis} --- para ser avaliada, \ensuremath{\Varid{x}} em \ensuremath{\Varid{evaluate}\;\Varid{x}} não pode conter variáveis. Assim, por exemplo,
+        \begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\Varid{evaluate}\;\Varid{e}\mathrel{=}\Conid{Nothing}{}\<[E]%
+\\
+\>[9]{}\Varid{evaluate}\;(\Varid{let\char95 exp}\;\Varid{f}\;\Varid{e})\mathrel{=}\Conid{Just}\;\mathrm{40}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+para \ensuremath{\Varid{f}} e \ensuremath{\Varid{e}}  dadas acima.
+
+\item \emph{Aridades} --- todas as ocorrências dos operadores deverão ter
+      o devido número de sub-expressões, por exemplo:
+        \begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\Varid{evaluate}\;(\Conid{T}\;\Conid{Add}\;[\mskip1.5mu \Conid{N}\;\mathrm{2},\Conid{N}\;\mathrm{3}\mskip1.5mu])\mathrel{=}\Conid{Just}\;\mathrm{5}{}\<[E]%
+\\
+\>[9]{}\Varid{evaluate}\;(\Conid{T}\;\Conid{Mul}\;[\mskip1.5mu \Conid{N}\;\mathrm{2}\mskip1.5mu])\mathrel{=}\Conid{Nothing}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\end{enumerate}
+
+\end{enumerate}
+
+\noindent
+\textbf{Sugestão}: de novo se insiste na escrita do mínimo de código possível,
+tirando partido da riqueza estrutural do tipo \ensuremath{\Conid{Expr}} que é assunto desta questão.
+Sugere-se também o recurso a diagramas para explicar as soluções propostas.
+
 \part*{Anexos}
 
 \appendix
@@ -522,7 +673,7 @@ tal como se explica no anexo \ref{sec:diagramas} que se segue.
 
 Como primeiro exemplo, estudar o texto fonte (\lhstotex{lhs}) do que está a ler\footnote{
 Procure e.g.\ por \texttt{"sec:diagramas"}.} onde se obtém o efeito seguinte:\footnote{Exemplos
-tirados de \cite{Ol05}.}
+tirados de \cite{Ol18}.}
 \begin{eqnarray*}
 \start
 \ensuremath{\Varid{id}\mathrel{=}\conj{\Varid{f}}{\Varid{g}}}
@@ -561,6 +712,37 @@ Os diagramas podem ser produzidos recorrendo à \emph{package} \Xymatrix, por ex
 \ColumnHook
 \end{hscode}\resethooks
 
+\subsection*{Problema 4}
+Definição do tipo:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{inExpr}\mathrel{=}\alt{\Conid{V}}{\alt{\Conid{N}}{\uncurry{\Conid{T}}}}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{baseExpr}\;\Varid{g}\;\Varid{h}\;\Varid{f}\mathrel{=}\Varid{g}+(\Varid{h}+\Varid{id}\times\map \;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Exemplos de expressões:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{e}\mathrel{=}\Varid{ite}\;(\Conid{V}\;\text{\ttfamily \char34 x\char34})\;(\Conid{N}\;\mathrm{0})\;(\Varid{multi}\;(\Conid{V}\;\text{\ttfamily \char34 y\char34})\;(\Varid{soma}\;(\Conid{N}\;\mathrm{3})\;(\Conid{V}\;\text{\ttfamily \char34 y\char34}))){}\<[E]%
+\\
+\>[B]{}\Varid{i}\mathrel{=}\Varid{ite}\;(\Conid{V}\;\text{\ttfamily \char34 x\char34})\;(\Conid{N}\;\mathrm{1})\;(\Varid{multi}\;(\Conid{V}\;\text{\ttfamily \char34 y\char34})\;(\Varid{soma}\;(\Conid{N}\;(\mathrm{3}\mathbin{/}\mathrm{5}))\;(\Conid{V}\;\text{\ttfamily \char34 y\char34}))){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Exemplo de teste:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{teste}\mathrel{=}\Varid{evaluate}\;(\Varid{let\char95 exp}\;\Varid{f}\;\Varid{i})\equiv \Conid{Just}\;(\mathrm{26}\mathbin{/}\mathrm{245}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{f}\;\text{\ttfamily \char34 x\char34}\mathrel{=}\Conid{N}\;\mathrm{0};\Varid{f}\;\text{\ttfamily \char34 y\char34}\mathrel{=}\Conid{N}\;(\mathrm{1}\mathbin{/}\mathrm{7}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
 %----------------- Soluções dos alunos -----------------------------------------%
 
 \section{Soluções dos alunos}\label{sec:resolucao}
@@ -577,8 +759,36 @@ que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{18}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{hindex}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{gcata}\mathbin{::}[\mskip1.5mu \Conid{Int}\mskip1.5mu]\to ()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
+\\
+\>[B]{}\Varid{gcata}\mathrel{=}(\Varid{id}+{}\<[18]%
+\>[18]{}(\conj{\conj{\Varid{head}}{\Varid{id}}}{\Varid{tail}}\comp \Varid{cons}))\comp \Varid{outList}\comp \Varid{iSort}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{pp1}\mathrel{=}\uncurry{(\not\equiv )}\comp \conj{\p1\comp \p2}{\underline{\mathrm{0}}}{}\<[E]%
+\\
+\>[B]{}\Varid{pp2}\mathrel{=}\uncurry{(\leq )}\comp \conj{\p1\comp \p2}{\length \comp \p2\comp \p2}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{fcata}\mathbin{::}()+((\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]),(\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]))\to (\Conid{Int},[\mskip1.5mu \Conid{Int}\mskip1.5mu]){}\<[E]%
+\\
+\>[B]{}\Varid{fcata}\mathrel{=}\alt{{}\<[21]%
+\>[21]{}\conj{\underline{\mathrm{0}}}{\Varid{nil}}}{\Varid{cond}\;(\uncurry{(\mathrel{\wedge})}\comp \conj{\Varid{pp1}}{\Varid{pp2}})\;\p2\;\p1}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{hindex}\mathrel{=}\Varid{hyloList}\;\Varid{fcata}\;\Varid{gcata}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -587,14 +797,125 @@ Primeira parte:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{primes}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outPrimes}\;\mathrm{0}\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[B]{}\Varid{outPrimes}\;\mathrm{1}\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[B]{}\Varid{outPrimes}\;(\mathbin{-}\mathrm{1})\mathrel{=}i_1\;(){}\<[E]%
+\\
+\>[B]{}\Varid{outPrimes}\;\Varid{n}\mathrel{=}i_2\;(\Varid{abs}\;\Varid{n}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{divisorsList}\mathbin{::}\mathbb{Z}\to [\mskip1.5mu \mathbb{Z}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{divisorsList}\;\Varid{n}\mathrel{=}[\mskip1.5mu \Varid{x}\mid \Varid{x}\leftarrow [\mskip1.5mu \mathrm{2}\mathinner{\ldotp\ldotp}\Varid{isqrt}\;\Varid{n}\mskip1.5mu],\Varid{mod}\;\Varid{n}\;\Varid{x}\equiv \mathrm{0}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathbf{where}\;\Varid{isqrt}\mathrel{=}\Varid{floor}\comp \Varid{sqrt}\comp \Varid{fromIntegral}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{isPrime}\mathbin{::}\mathbb{Z}\to \Conid{Bool}{}\<[E]%
+\\
+\>[B]{}\Varid{isPrime}\mathrel{=}\alt{\Varid{false}}{\Varid{null}\comp \Varid{divisorsList}}\comp \Varid{outPrimes}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{nextPrimeFactor}\mathbin{::}\mathbb{Z}\to \mathbb{Z}{}\<[E]%
+\\
+\>[B]{}\Varid{nextPrimeFactor}\;\Varid{n}\mathrel{=}\Varid{head}\;[\mskip1.5mu \Varid{x}\mid \Varid{x}\leftarrow \mathrm{2}\mathbin{:}[\mskip1.5mu \mathrm{3},\mathrm{5}\mathinner{\ldotp\ldotp}\Varid{n}\mskip1.5mu],\Varid{mod}\;\Varid{n}\;\Varid{x}\equiv \mathrm{0}\mathrel{\wedge}\Varid{isPrime}\;\Varid{x}\mskip1.5mu]{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{primes}\mathrel{=}\anaList{(\Varid{id}+\conj{\Varid{nextPrimeFactor}}{\Varid{aap}\;\cdot \div \cdot \;\Varid{nextPrimeFactor}})\comp \Varid{outPrimes}}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 Segunda parte:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{prime\char95 tree}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{buildPairs}\mathbin{::}[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\to [\mskip1.5mu ([\mskip1.5mu \mathbb{Z}\mskip1.5mu],\mathbb{Z})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{buildPairs}\mathrel{=}\map \;\conj{(\mathbin{:})\;\mathrm{1}\comp \Varid{primes}}{\Varid{id}}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{prime\char95 tree}\mathrel{=}\Varid{head}\comp \Varid{untar}\comp \Varid{buildPairs}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Problema 3}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{convolve}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{convolve}\;\Varid{hs}\mathrel{=}\Varid{hyloList}\;\Varid{f}\;\Varid{g}\comp \Varid{suffixes}\comp \Varid{flip}\;\Varid{padZeros}\;(\length \;\Varid{hs}\mathbin{-}\mathrm{1}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{padZeros}\;\Varid{l}\mathrel{=}\cataNat{\alt{\underline{\Varid{l}}}{\mathrm{0}\mathbin{:}}}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{f}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}\comp (\Varid{sum}\times\Varid{id})}{}\<[E]%
+\\
+\>[3]{}\hsindent{6}{}\<[9]%
+\>[9]{}\Varid{g}\mathrel{=}(\Varid{id}+(\Varid{zipWith}\;(\mathbin{*})\;(\Varid{reverse'}\;\Varid{hs})\times\Varid{id}))\comp \Varid{outList}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Problema 4}
+Definição do tipo:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{outExpr}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{recExpr}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\emph{Ana + cata + hylo}:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{cataExpr}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{anaExpr}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{hyloExpr}\;\Varid{h}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\emph{Maps}:
+\emph{Monad}:
+\emph{Let expressions}:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{let\char95 exp}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Catamorfismo monádico:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{mcataExpr}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+Avaliação de expressões:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{evaluate}\mathrel{=}\bot {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

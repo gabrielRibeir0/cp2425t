@@ -565,24 +565,61 @@ que sejam necessárias.
 \subsection*{Problema 1}
 
 \begin{code}
-hindex = undefined
+gcata :: [Int] -> Either () ((Int, [Int]), [Int])
+gcata = (id -|-  (split (split head id) tail . cons)) . outList . iSort 
+\end{code}
+\begin{code}
+pp1 = uncurry (/=) . split (p1.p2) (const 0) 
+pp2 = uncurry (<=) . split (p1.p2) (length.p2.p2)
+\end{code}
+\begin{code}
+fcata :: Either () ((Int, [Int]), (Int, [Int])) -> (Int, [Int])
+fcata = either      (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)
+\end{code}
+\begin{code}
+hindex = hyloList fcata gcata
 \end{code}
 
 \subsection*{Problema 2}
 Primeira parte:
 \begin{code}
-primes = undefined
+outPrimes 0 = i1 ()
+outPrimes 1 = i1 ()
+outPrimes (-1) = i1 ()
+outPrimes n = i2 (abs n)
+\end{code}
+\begin{code}
+divisorsList :: Integer -> [Integer]
+divisorsList n = [x | x <- [2..isqrt n], mod n x == 0]
+    where isqrt = floor . sqrt . fromIntegral
+\end{code}
+\begin{code}
+isPrime :: Integer -> Bool
+isPrime = either false (null . divisorsList) . outPrimes
+\end{code}
+\begin{code}
+nextPrimeFactor :: Integer -> Integer
+nextPrimeFactor n = head [x | x <- 2:[3,5..n], mod n x == 0 && isPrime x]
+\end{code}
+\begin{code}   
+primes = anaList ((id -|- split nextPrimeFactor (aap div nextPrimeFactor)) . outPrimes)
 \end{code}
 Segunda parte:
 \begin{code}
-prime_tree = undefined
+buildPairs :: [Integer] -> [([Integer], Integer)]
+buildPairs = map (split ((:) 1 . primes) id)
+
+prime_tree = head . untar . buildPairs 
 \end{code}
 
 \subsection*{Problema 3}
 
 \begin{code}
 convolve :: Num a => [a] -> [a] -> [a]
-convolve = undefined
+convolve hs = hyloList f g . suffixes . flip padZeros (length hs - 1)
+  where padZeros l = cataNat (either (const l) (0:))
+        f = either nil (cons . (sum >< id))
+        g = (id -|- (zipWith (*) (reverse' hs) >< id)) . outList
 \end{code}
 
 \subsection*{Problema 4}
