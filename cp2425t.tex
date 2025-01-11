@@ -269,7 +269,7 @@
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
+\group{G05}
 \studentA{103993}{Júlia Bughi Corrêa da Costa }
 \studentB{104171}{Gabriel Pereira Ribeiro }
 \studentC{104613}{Luís Pinto da Cunha }
@@ -827,18 +827,43 @@ Primeira parte:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{nextPrimeFactor}\mathbin{::}\mathbb{Z}\to \mathbb{Z}{}\<[E]%
+\>[B]{}\Varid{nextFactor}\mathbin{::}\mathbb{Z}\to \mathbb{Z}{}\<[E]%
 \\
-\>[B]{}\Varid{nextPrimeFactor}\;\Varid{n}\mathrel{=}\Varid{head}\;[\mskip1.5mu \Varid{x}\mid \Varid{x}\leftarrow \mathrm{2}\mathbin{:}[\mskip1.5mu \mathrm{3},\mathrm{5}\mathinner{\ldotp\ldotp}\Varid{n}\mskip1.5mu],\Varid{mod}\;\Varid{n}\;\Varid{x}\equiv \mathrm{0}\mathrel{\wedge}\Varid{isPrime}\;\Varid{x}\mskip1.5mu]{}\<[E]%
+\>[B]{}\Varid{nextFactor}\;\Varid{n}\mathrel{=}\Varid{head}\;[\mskip1.5mu \Varid{x}\mid \Varid{x}\leftarrow \mathrm{2}\mathbin{:}[\mskip1.5mu \mathrm{3},\mathrm{5}\mathinner{\ldotp\ldotp}\Varid{n}\mskip1.5mu],\Varid{mod}\;\Varid{n}\;\Varid{x}\equiv \mathrm{0}\mathrel{\wedge}\Varid{isPrime}\;\Varid{x}\mskip1.5mu]{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{primes}\mathrel{=}\anaList{(\Varid{id}+\conj{\Varid{nextPrimeFactor}}{\Varid{aap}\;\cdot \div \cdot \;\Varid{nextPrimeFactor}})\comp \Varid{outPrimes}}{}\<[E]%
+\>[B]{}\Varid{primes}\mathrel{=}\anaList{(\Varid{id}+\conj{\Varid{nextFactor}}{\Varid{aap}\;\cdot \div \cdot \;\Varid{nextFactor}})\comp \Varid{outPrimes}}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=5cm@R=2cm{
+    \ensuremath{\mathbb{Z}}
+           \ar[d]_-{\ensuremath{\Varid{primes}}}
+           \ar[r]^-{\ensuremath{\Varid{outPrimes}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}}
+           \ar[r]^-{\ensuremath{\Varid{id}\mathbin{+}\conj{\Varid{nextFactor}}{\Varid{aap}\;\cdot \div \cdot \;\Varid{nextFactor}}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}\times\mathbb{Z}}
+              \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}\Varid{id}\times\Varid{primes}}}
+\\
+     \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+&
+&
+     \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+           \ar[ll]^-{\ensuremath{\alt{\Varid{nil}}{\Varid{cons}}}}
+}
+\end{eqnarray*}
+
 Segunda parte:
+
+Para criar a árvore precisamos criar os 'ramos', neste caso num par no formato (fatorização, número) com a função \ensuremath{\Varid{buildPairs}}.
+
+Depois, fornecemos esses 'ramos' à função \ensuremath{\Varid{untar}} que irá criar a árvore do tipo \ensuremath{\Conid{Exp}\;\mathbb{Z}\;\mathbb{Z}}. Essa árvore vem numa lista, então apenas precisamos de usar \ensuremath{\Varid{head}} para a obter.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%

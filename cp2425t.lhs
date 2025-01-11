@@ -119,7 +119,7 @@
 
 %====== DEFINIR GRUPO E ELEMENTOS =============================================%
 
-\group{G99}
+\group{G05}
 \studentA{103993}{Júlia Bughi Corrêa da Costa }
 \studentB{104171}{Gabriel Pereira Ribeiro }
 \studentC{104613}{Luís Pinto da Cunha }
@@ -598,13 +598,38 @@ isPrime :: Integer -> Bool
 isPrime = either false (null . divisorsList) . outPrimes
 \end{code}
 \begin{code}
-nextPrimeFactor :: Integer -> Integer
-nextPrimeFactor n = head [x | x <- 2:[3,5..n], mod n x == 0 && isPrime x]
+nextFactor :: Integer -> Integer
+nextFactor n = head [x | x <- 2:[3,5..n], mod n x == 0 && isPrime x]
 \end{code}
 \begin{code}   
-primes = anaList ((id -|- split nextPrimeFactor (aap div nextPrimeFactor)) . outPrimes)
+primes = anaList ((id -|- split nextFactor (aap div nextFactor)) . outPrimes)
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=5cm@@R=2cm{
+    |Integer|
+           \ar[d]_-{|primes|}
+           \ar[r]^-{|outPrimes|}
+&
+    |1 + Integer|
+           \ar[r]^-{|id + split nextFactor (aap div nextFactor)|}
+&
+    |1 + Integer >< Integer|
+              \ar[d]^-{|id + id >< primes|}
+\\
+     |[Integer]|
+&
+&
+     |1 + Integer >< [Integer]|
+           \ar[ll]^-{|either nil cons|}
+}
+\end{eqnarray*}
+
 Segunda parte:
+
+Para criar a árvore precisamos criar os 'ramos', neste caso num par no formato (fatorização, número) com a função |buildPairs|.
+
+Depois, fornecemos esses 'ramos' à função |untar| que irá criar a árvore do tipo |Exp Integer Integer|. Essa árvore vem numa lista, então apenas precisamos de usar |head| para a obter.
 \begin{code}
 buildPairs :: [Integer] -> [([Integer], Integer)]
 buildPairs = map (split ((:) 1 . primes) id)
