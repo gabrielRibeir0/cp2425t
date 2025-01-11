@@ -565,19 +565,19 @@ que sejam necessárias.
 \subsection*{Problema 1}
 
 \begin{code}
-gcata :: [Int] -> Either () ((Int, [Int]), [Int])
-gcata = (id -|-  (split (split head id) tail . cons)) . outList . iSort 
+divide :: [Int] -> Either () ((Int, [Int]), [Int])
+divide = (id -|-  (split (split head id) tail . cons)) . outList . iSort 
 \end{code}
 \begin{code}
 pp1 = uncurry (/=) . split (p1.p2) (const 0) 
 pp2 = uncurry (<=) . split (p1.p2) (length.p2.p2)
 \end{code}
 \begin{code}
-fcata :: Either () ((Int, [Int]), (Int, [Int])) -> (Int, [Int])
-fcata = either      (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)
+conquer :: Either () ((Int, [Int]), (Int, [Int])) -> (Int, [Int])
+conquer = either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)
 \end{code}
 \begin{code}
-hindex = hyloList fcata gcata
+hindex = hyloList conquer divide
 \end{code}
 
 \subsection*{Problema 2}
