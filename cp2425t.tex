@@ -792,6 +792,17 @@ que sejam necessárias.
 
 \subsection*{Problema 2}
 Primeira parte:
+
+O \ensuremath{\Varid{outNat}} não é suficiente para este problema, logo desenvolvemos um \ensuremath{\Varid{outPrimes}} que junta os casos de 0, 1 e -1,
+e no outro caso faz o módulo do número que recebe.
+
+\ensuremath{\Varid{divisorsList}} cria a lista de divisores de um número até à sua raiz quadrada (otimização).
+Esta é usada depois na função \ensuremath{\Varid{isPrime}} que verifica se um número é primo.
+Depois, \ensuremath{\Varid{nextFactor}} verifica qual o próximo fator primo de um número.
+
+Por fim, \ensuremath{\Varid{primes}} é o anamorfismo que gera a lista de primos. A parte \ensuremath{\Varid{aap}\;\cdot \div \cdot \;\Varid{nextFactor}} recebe um inteiro \ensuremath{\Varid{n}} e
+divide-o pelo seu próximo fator primo.
+\ensuremath{\Varid{aap}} é uma função monádica que calcula \ensuremath{\Varid{nextFactor}\;\Varid{n}} e depois usa o resultado como argumento a \ensuremath{\Varid{n}\div \Varid{nextFactor}\;\Varid{n}}.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -884,7 +895,7 @@ Depois, fornecemos esses 'ramos' à função \ensuremath{\Varid{untar}} que irá
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{convolve}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{convolve}\;\Varid{hs}\mathrel{=}\Varid{hyloList}\;\Varid{f}\;\Varid{g}\comp \Varid{suffixes}\comp \Varid{flip}\;\Varid{padZeros}\;(\length \;\Varid{hs}\mathbin{-}\mathrm{1}){}\<[E]%
+\>[B]{}\Varid{convolve}\;\Varid{l1}\mathrel{=}\Varid{hyloList}\;\Varid{f}\;\Varid{g}\comp \Varid{suffixes}\comp \Varid{flip}\;\Varid{padZeros}\;(\length \;\Varid{l1}\mathbin{-}\mathrm{1}){}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{padZeros}\;\Varid{l}\mathrel{=}\cataNat{\alt{\underline{\Varid{l}}}{\mathrm{0}\mathbin{:}}}{}\<[E]%
@@ -893,7 +904,7 @@ Depois, fornecemos esses 'ramos' à função \ensuremath{\Varid{untar}} que irá
 \>[9]{}\Varid{f}\mathrel{=}\alt{\Varid{nil}}{\Varid{cons}\comp (\Varid{sum}\times\Varid{id})}{}\<[E]%
 \\
 \>[3]{}\hsindent{6}{}\<[9]%
-\>[9]{}\Varid{g}\mathrel{=}(\Varid{id}+(\Varid{zipWith}\;(\mathbin{*})\;(\Varid{reverse'}\;\Varid{hs})\times\Varid{id}))\comp \Varid{outList}{}\<[E]%
+\>[9]{}\Varid{g}\mathrel{=}(\Varid{id}+(\Varid{zipWith}\;(\mathbin{*})\;(\Varid{reverse'}\;\Varid{l1})\times\Varid{id}))\comp \Varid{outList}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

@@ -582,6 +582,17 @@ hindex = hyloList conquer divide
 
 \subsection*{Problema 2}
 Primeira parte:
+
+O |outNat| não é suficiente para este problema, logo desenvolvemos um |outPrimes| que junta os casos de 0, 1 e -1,
+e no outro caso faz o módulo do número que recebe.
+
+|divisorsList| cria a lista de divisores de um número até à sua raiz quadrada (otimização).
+Esta é usada depois na função |isPrime| que verifica se um número é primo.
+Depois, |nextFactor| verifica qual o próximo fator primo de um número.
+
+Por fim, |primes| é o anamorfismo que gera a lista de primos. A parte |aap div nextFactor| recebe um inteiro |n| e
+divide-o pelo seu próximo fator primo.
+|aap| é uma função monádica que calcula |nextFactor n| e depois usa o resultado como argumento a |div n (nextFactor n)|.
 \begin{code}
 outPrimes 0 = i1 ()
 outPrimes 1 = i1 ()
@@ -641,10 +652,10 @@ prime_tree = head . untar . buildPairs
 
 \begin{code}
 convolve :: Num a => [a] -> [a] -> [a]
-convolve hs = hyloList f g . suffixes . flip padZeros (length hs - 1)
+convolve l1 = hyloList f g . suffixes . flip padZeros (length l1 - 1)
   where padZeros l = cataNat (either (const l) (0:))
         f = either nil (cons . (sum >< id))
-        g = (id -|- (zipWith (*) (reverse' hs) >< id)) . outList
+        g = (id -|- (zipWith (*) (reverse' l1) >< id)) . outList
 \end{code}
 
 \subsection*{Problema 4}
