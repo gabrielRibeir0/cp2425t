@@ -59,10 +59,7 @@ let_exp = flip (>>=)
 
 --avaliacao de expressoes
 evaluate :: (Num a, Ord a) => Expr a b -> Maybe a
-evaluate = cataExpr eval
-
-eval :: (Num a, Ord a) => Either b (Either a (Op, [Maybe a])) -> Maybe a
-eval = either nothing (either Just g)
+evaluate = cataExpr (either nothing (either Just g))
     where g (op, vals) = case (op, sequence vals) of
             (Add, Just [x, y]) -> Just (x + y)
             (Mul, Just [x, y]) -> Just (x * y)
