@@ -36,9 +36,7 @@ anaExpr f = inExpr . recExpr (anaExpr f) . f
 hyloExpr h g = cataExpr h . anaExpr g 
 
 instance Functor (Expr b) where
-    fmap f (V x) = V (f x)
-    fmap _ (N n) = N n
-    fmap f (T op l) = T op (map (fmap f) l)
+    fmap f = cataExpr (inExpr . baseExpr f id id)
 
 instance Applicative (Expr b) where
     pure = return
@@ -46,9 +44,7 @@ instance Applicative (Expr b) where
 
 instance Monad (Expr b) where
     return = V
-    (V x) >>= f = f x
-    (N n) >>= _ = N n
-    (T op l) >>= f = T op (map (>>= f) l)
+    e >>= f = cataExpr (either f (either N (uncurry T))) e
 
 mcataExpr :: Monad m => (Either a ( Either b (Op, m [c])) -> m c) -> Expr b a -> m c
 mcataExpr g = g .! (aux . recExpr (mcataExpr g) . outExpr)
@@ -63,9 +59,7 @@ aux (Right (Right (op, l))) = do
 
 -- Maps: Monad: Let Expressions:
 let_exp :: Num c => (a -> Expr c b) -> Expr c a -> Expr c b
-let_exp f (V x) = f x 
-let_exp _ (N n) = N n
-let_exp f (T op l) = T op (map (let_exp f) l) 
+let_exp = flip (>>=)
 
 --avaliacao de expressoes
 evaluate :: (Num a, Ord a) => Expr a b -> Maybe a
@@ -80,4 +74,9 @@ eval (Right (Right (op, vals))) = case (op, sequence vals) of
     (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
     _ -> Nothing
 
+e = (ite (V "x") (N 0) (multi (V "y") (soma (N 3) (V "y"))))
 
+f :: Num b => String -> Expr b a
+f "x" = N 0
+f "y" = N 5
+f _ = N 99
