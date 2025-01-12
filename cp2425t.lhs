@@ -753,7 +753,9 @@ cataExpr g = g . recExpr (cataExpr g) . outExpr
 anaExpr g = inExpr .recExpr (anaExpr g) .g
                 
 hyloExpr h g = cataExpr h . anaExpr g
+\end{code}
 
+\begin{code}
 instance Functor (Expr b) where
     fmap f = cataExpr (inExpr . baseExpr f id id)
 
@@ -774,18 +776,17 @@ let_exp = flip(>>=)
 \end{code}
 
 \begin{eqnarray*}
-\xymatrix@@C=5cm@@R=2cm{
+\xymatrix@@C=3.5cm@@R=2cm{
     |Expr C A|
            \ar[d]_-{|let_exp f|}
            \ar[r]^-{|outExpr|}
 &
-    |A + (C + op >< (Expr C A))|
-           \ar[d]^-{|id + (id + id x (map (let_exp f))|}
+    |A + (C + Op >< (Expr C A))|
+           \ar[d]^-{|id + (id + id x (map(let_exp f)))|}
 \\
      |Expr C B|
 &
-&
-     |A + (C + op >< (Expr C B))|
+     |A + (C + Op >< (Expr C B))|
            \ar[l]^-{|either f (either N (uncurry T))|}
 }
 \end{eqnarray*}
