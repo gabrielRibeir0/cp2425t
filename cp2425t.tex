@@ -792,38 +792,42 @@ Para a resolução deste problema, utilizamos uma abordagem em duas fases, \ensu
 \end{hscode}\resethooks
 
 \begin{eqnarray*}
-\xymatrix{
-    \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+\xymatrix@C=2cm@R=2cm{
+    \ensuremath{[\mathbb{Z}]}
             \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
             \ar[r]^-{\ensuremath{\Varid{iSort}}}
 &
-    \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+    \ensuremath{[\mathbb{Z}]}
             \ar[r]^-{\ensuremath{\Varid{outList}}}
 &
-    \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
-            \ar[r]^-{\ensuremath{\Varid{id}\mathbin{+}(\conj{\conj{\Varid{head}}{\Varid{id}}}{\Varid{tail}}\comp \Varid{cons})}}
+    \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}\times[\mathbb{Z}]}
+            \ar[r]^-{\ensuremath{\Varid{id}+\langle\langle\Varid{head},\Varid{id}\rangle,\Varid{tail}\comp \Varid{cons}\rangle}}
 &
-    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
-            \ar[d]_-{id + (id x id) x (ana divide)}              
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mathbb{Z}])\times[\mathbb{Z}]}
+            \ar[d]^-{\ensuremath{\Varid{id} + (\Varid{id} \times \Varid{id}) \times (\ana{\Varid{divide}})}}              
 \\
-    \ensuremath{[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
-            \ar[rrr]^-{\ensuremath{\Varid{out}}}
+    \ensuremath{[\mathbb{Z}\times[\mathbb{Z}]]}
+            \ar@/^/[rrr]^-{\ensuremath{\Varid{out}}}
+            \ar[d]_-{\ensuremath{\cata{\Varid{conquer}}}}
 &
 &
 &
-    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
-            \ar[lll]^-{\ensuremath{\mathbf{in}}}
-            \ar[d]_-{id + (id x id) x (cata conquer)} 
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mathbb{Z}])\times[\mathbb{Z}\times[\mathbb{Z}]]}
+            \ar@/^/[lll]_-{\ensuremath{\Varid{in}}}
+            \ar[d]^-{\ensuremath{\Varid{id} + (\Varid{id} \times \Varid{id}) \times (\cata{\Varid{conquer}})}}
 \\
-    \ensuremath{\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+    \ensuremath{\mathbb{Z}\times[\mathbb{Z}]}
 &
 &
 &
-    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])}
-            \ar[lll]^-{either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)}             
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mathbb{Z}])\times(\mathbb{Z}\times[\mathbb{Z}])}
+            \ar[lll]^-{\ensuremath{\alt{\langle\Varid{const}\ 0,\Varid{nil}\rangle\ }{(\uncurry{\Varid{\char38\char38}})\comp \langle\Varid{pp1},\Varid{pp2}\rangle\Varid{->}\pi{1},\pi{2}}}}             
 }
 \end{eqnarray*}
 
+\ensuremath{\Varid{pp1}\;\mathrel{=}\;(\uncurry{\Varid{/=}})\comp\langle\pi{1}\comp\pi{2},\Varid{const}\ 0\rangle}
+
+\ensuremath{\Varid{pp2}\;\mathrel{=}\;(\uncurry{\Varid{<=}})\comp\langle\pi{1}\comp\pi{2},\Varid{length}\comp\pi{2}\comp\pi{2}\rangle}
 
 \subsection*{Problema 2}
 Primeira parte:
@@ -948,20 +952,25 @@ Definição do tipo:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{outExpr}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outExpr}\;(\Varid{V}\;\Varid{a})\mathrel{=}i_1\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{outExpr}\;(\Varid{N}\;\Varid{b})\mathrel{=}i_2\;(i_1\;\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{outExpr}\;(\Varid{T}\;\Varid{op}\;\Varid{l})\mathrel{=}i_2\;(i_2\;(\Varid{op},\Varid{l})){}\<[E]%
+\\
 \\[\blanklineskip]%
-\>[B]{}\Varid{recExpr}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{recExpr}\;\Varid{f}\mathrel{=}\Varid{baseExpr}\;\Varid{id}\;\Varid{id}\;\Varid{f} {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \emph{Ana + cata + hylo}:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cataExpr}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{cataExpr}\;\Varid{g}\mathrel{=}\Varid{g}\comp \Varid{recExpr}\;(\Varid{cataExpr}\;\Varid{g})\comp \Varid{outExpr}  {}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{anaExpr}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{anaExpr}\;\Varid{g}\mathrel{=}\Varid{inExpr}\comp \Varid{recExpr}\;(\Varid{anaExpr}\;\Varid{g})\comp \Varid{g} {}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{hyloExpr}\;\Varid{h}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{hyloExpr}\;\Varid{h}\;\Varid{g}\mathrel{=}\Varid{cataExpr}\;\Varid{h}\comp \Varid{anaExpr}\;\Varid{g} {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \emph{Maps}:
@@ -970,9 +979,26 @@ Definição do tipo:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{let\char95 exp}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{let\char95 exp}\mathrel{=}\Varid{flip}\;(\mathrel{>}\mathrel{>}\mathrel{=}) {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=5cm@R=2cm{
+    \ensuremath{\Varid{Expr}\;\Varid{C}\;\Varid{A}}
+            \ar[d]_-{\ensuremath{\Varid{let\char95 exp}\;\Varid{f}}}
+            \ar[r]^-{\ensuremath{\Varid{outExpr}}}
+&
+    \ensuremath{\Varid{A}\mathbin{+}(\Varid{C}\mathbin{+}\Varid{OP}\times(\Varid{Expr}\;\Varid{C}\;\Varid{A}))}
+            \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\mathbin{+}\Varid{id}\times(\Varid{map}(\Varid{let\char95 expr}\;\Varid{f}))}}
+\\
+    \ensuremath{\Varid{Expr}\;\Varid{C}\;\Varid{B}}
+&
+    \ensuremath{\Varid{A}\mathbin{+}(\Varid{C}\mathbin{+}\Varid{OP}\times(\Varid{Expr}\;\Varid{C}\;\Varid{B}))}
+            \ar[l]^-{\ensuremath{\alt{\Varid{f}}{\alt{\Varid{N}}{\uncurry{\Conid{T}}}}}}
+}
+\end{eqnarray*}
+
 Catamorfismo monádico:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
