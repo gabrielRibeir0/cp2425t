@@ -1,15 +1,15 @@
-import Cp 
-import St 
+import Cp
+import St
 
-data Op = ITE 
-        | Add 
-        | Mul 
+data Op = ITE
+        | Add
+        | Mul
         | Suc
         deriving (Show,Eq)
 
 
-data Expr b a = V a 
-                | N b 
+data Expr b a = V a
+                | N b
                 | T Op [Expr b a]
                 deriving (Show,Eq)
 
@@ -33,7 +33,7 @@ cataExpr g = g . recExpr (cataExpr g) . outExpr
 
 anaExpr f = inExpr . recExpr (anaExpr f) . f
 
-hyloExpr h g = cataExpr h . anaExpr g 
+hyloExpr h g = cataExpr h . anaExpr g
 
 instance Functor (Expr b) where
     fmap f = cataExpr (inExpr . baseExpr f id id)
@@ -50,12 +50,8 @@ mcataExpr :: Monad m => (Either a ( Either b (Op, m [c])) -> m c) -> Expr b a ->
 mcataExpr g = g .! (aux . recExpr (mcataExpr g) . outExpr)
 
 aux :: Monad m => Either a (Either b (Op, [m c])) -> m (Either a (Either b (Op, m [c])))
-aux (Left a) = return (Left a)
-aux (Right (Left b)) = return (Right (Left b))
-aux (Right (Right (op, l))) = do
-    cs <- sequence l
-    return (Right (Right (op, return cs)))
-
+aux = either (return . i1) (either (return . i2 . i1) ret)
+    where ret = return . i2 . i2 . split p1 (sequence . p2)
 
 -- Maps: Monad: Let Expressions:
 let_exp :: Num c => (a -> Expr c b) -> Expr c a -> Expr c b
@@ -63,18 +59,17 @@ let_exp = flip (>>=)
 
 --avaliacao de expressoes
 evaluate :: (Num a, Ord a) => Expr a b -> Maybe a
-evaluate = cataExpr eval 
+evaluate = cataExpr eval
 
 eval :: (Num a, Ord a) => Either b (Either a (Op, [Maybe a])) -> Maybe a
-eval (Left _) = Nothing
-eval (Right (Left n)) = Just n
-eval (Right (Right (op, vals))) = case (op, sequence vals) of
-    (Add, Just [x, y]) -> Just (x + y)  
-    (Mul, Just [x, y]) -> Just (x * y)
-    (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
-    _ -> Nothing
+eval = either nothing (either Just g)
+    where g (op, vals) = case (op, sequence vals) of
+            (Add, Just [x, y]) -> Just (x + y)
+            (Mul, Just [x, y]) -> Just (x * y)
+            (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
+            _ -> Nothing
 
-e = (ite (V "x") (N 0) (multi (V "y") (soma (N 3) (V "y"))))
+e = ite (V "x") (N 0) (ite (V "x") (N 0) (multi (V "y") (soma (N 3) (V "y"))))
 
 f :: Num b => String -> Expr b a
 f "x" = N 0
