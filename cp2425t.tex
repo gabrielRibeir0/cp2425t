@@ -756,6 +756,7 @@ que sejam necessárias.
 \textbf{Importante}: Não pode ser alterado o texto deste ficheiro fora deste anexo.
 
 \subsection*{Problema 1}
+Para a resolução deste problema, utilizamos uma abordagem em duas fases, \ensuremath{\Varid{divide}} e \ensuremath{\Varid{conquer}}, típica dos hilomorfismos.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -789,6 +790,40 @@ que sejam necessárias.
 \>[B]{}\Varid{hindex}\mathrel{=}\Varid{hyloList}\;\Varid{conquer}\;\Varid{divide}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix{
+    \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+            \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
+            \ar[r]^-{\ensuremath{\Varid{iSort}}}
+&
+    \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+            \ar[r]^-{\ensuremath{\Varid{outList}}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+            \ar[r]^-{\ensuremath{\Varid{id}\mathbin{+}(\conj{\conj{\Varid{head}}{\Varid{id}}}{\Varid{tail}}\comp \Varid{cons})}}
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+            \ar[d]_-{id + (id x id) x (ana divide)}              
+\\
+    \ensuremath{[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
+            \ar[rrr]^-{\ensuremath{\Varid{out}}}
+&
+&
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
+            \ar[lll]^-{\ensuremath{\mathbf{in}}}
+            \ar[d]_-{id + (id x id) x (cata conquer)} 
+\\
+    \ensuremath{\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
+&
+&
+&
+    \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])}
+            \ar[lll]^-{either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)}             
+}
+\end{eqnarray*}
+
 
 \subsection*{Problema 2}
 Primeira parte:

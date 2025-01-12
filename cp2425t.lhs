@@ -563,6 +563,7 @@ que sejam necessárias.
 \textbf{Importante}: Não pode ser alterado o texto deste ficheiro fora deste anexo.
 
 \subsection*{Problema 1}
+Para a resolução deste problema, utilizamos uma abordagem em duas fases, |divide| e |conquer|, típica dos hilomorfismos.
 
 \begin{code}
 divide :: [Int] -> Either () ((Int, [Int]), [Int])
@@ -579,6 +580,40 @@ conquer = either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 
 \begin{code}
 hindex = hyloList conquer divide
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix{
+    |[Integer]|
+            \ar[d]_-{|ana divide|}
+            \ar[r]^-{|iSort|}
+&
+    |[Integer]|
+            \ar[r]^-{|outList|}
+&
+    |1 + Integer >< [Integer]|
+            \ar[r]^-{|id + (split (split head id) tail . cons)|}
+&
+    |1 + (Integer >< [Integer]) >< [Integer]|
+            \ar[d]_-{id + (id x id) x (ana divide)}              
+\\
+    |[Integer >< [Integer]]|
+            \ar[rrr]^-{|out|}
+&
+&
+&
+    |1 + (Integer >< [Integer]) >< [Integer >< [Integer]]|
+            \ar[lll]^-{|in|}
+            \ar[d]_-{id + (id x id) x (cata conquer)} 
+\\
+    |Integer >< [Integer]|
+&
+&
+&
+    |1 + (Integer >< [Integer]) >< (Integer >< [Integer])|
+            \ar[lll]^-{either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)}             
+}
+\end{eqnarray*}
+
 
 \subsection*{Problema 2}
 Primeira parte:
