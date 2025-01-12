@@ -775,6 +775,7 @@ Monad:
 let_exp = flip(>>=)
 \end{code}
 
+|let_exp| pode ser explicada pelo seguinte diagrama (que também ajuda a perceber |(>>=)|):
 \begin{eqnarray*}
 \xymatrix@@C=3.5cm@@R=2cm{
     |Expr C A|
