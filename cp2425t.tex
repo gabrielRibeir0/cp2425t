@@ -792,7 +792,7 @@ Para a resolução deste problema, utilizamos uma abordagem em duas fases, \ensu
 \end{hscode}\resethooks
 
 \begin{eqnarray*}
-\xymatrix@C=3.1cm@R=2cm{
+\xymatrix@C=3.1cm@R=1.5cm{
     \ensuremath{[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
            \ar[d]_-{\ensuremath{\ana{\Varid{divide}}}}
            \ar[r]^-{\ensuremath{\Varid{iSort}\comp \Varid{outList}}}
@@ -805,11 +805,11 @@ Para a resolução deste problema, utilizamos uma abordagem em duas fases, \ensu
 \\
      \ensuremath{[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
             \ar[d]_-{\ensuremath{\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
-            \ar[rr]^-{\ensuremath{\Varid{out}}}
+            \ar@/^/[rr]^-{\ensuremath{\Varid{out}}}
 &
 &
      \ensuremath{\mathrm{1}\mathbin{+}(\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu])\times[\mskip1.5mu \mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]\mskip1.5mu]}
-           \ar[ll]^-{\ensuremath{\mathbf{in}}}
+           \ar@/^/[ll]^-{\ensuremath{\mathbf{in}}}
            \ar[d]^-{\ensuremath{\Varid{id}\mathbin{+}(\Varid{id}\times\Varid{id})\times\llparenthesis\, \Varid{conquer}\,\rrparenthesis}}
 \\
     \ensuremath{\mathbb{Z}\times[\mskip1.5mu \mathbb{Z}\mskip1.5mu]}
@@ -919,8 +919,10 @@ Depois, fornecemos esses 'ramos' à função \ensuremath{\Varid{untar}} que irá
 \subsection*{Problema 3}
 O primeiro passo para a implementação da convolução de 2 listas é acrescentar (\ensuremath{\length \;\Varid{l1}\mathbin{-}\mathrm{1}}) zeros ao início da segunda lista
 para que fique com tamanho igual a \ensuremath{\length \;\Varid{l1}\mathbin{+}\length \;l_2 \mathbin{-}\mathrm{1}}, que é o tamanho da lista resultante da convolução.
-Depois calculamos as sublistas com \ensuremath{\Varid{sufixes}} para simular o deslizar de uma lista sobre a outra.
-De seguida são aplicados 2 \ensuremath{\map }, um escrito na forma de catamorfismo outro em anamorfismo para ser possível criar um hilomorfismo.
+
+Depois, calculamos as sublistas com \ensuremath{\Varid{sufixes}} para simular o deslizar de uma lista sobre a outra.
+
+De seguida, são aplicados 2 \ensuremath{\map }, um escrito na forma de catamorfismo outro em anamorfismo para ser possível criar um hilomorfismo.
 Primeiro, multiplica-se os elementos correspondentes das sublistas e da primeira lista invertida e de seguida reduz-se cada lista à sua soma
 tendo como resultado a lista correspondente à convolução.
 
@@ -966,7 +968,7 @@ Diagrama \ensuremath{\Varid{convolve}}:
 \xymatrix@C=3.5cm@R=1.5cm{
     \ensuremath{[\mskip1.5mu \Conid{A}\mskip1.5mu]}
            \ar[r]^-{\ensuremath{\Varid{flip}\;\Varid{padZeros}\;(\length \;\Varid{l1}\mathbin{-}\mathrm{1})}}
-           \ar[drr]_-{\ensuremath{\Varid{convolve}\;\Varid{l1}}}
+           \ar@/_/[drr]_-{\ensuremath{\Varid{convolve}\;\Varid{l1}}}
 &
     \ensuremath{[\mskip1.5mu \Conid{A}\mskip1.5mu]}
             \ar[r]^-{\ensuremath{\Varid{suffixes}}}

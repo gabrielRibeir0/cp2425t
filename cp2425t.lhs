@@ -582,7 +582,7 @@ hindex = hyloList conquer divide
 \end{code}
 
 \begin{eqnarray*}
-\xymatrix@@C=3.1cm@@R=2cm{
+\xymatrix@@C=3.1cm@@R=1.5cm{
     |[Integer]|
            \ar[d]_-{|ana divide|}
            \ar[r]^-{|iSort . outList|}
@@ -595,11 +595,11 @@ hindex = hyloList conquer divide
 \\
      |[Integer >< [Integer]]|
             \ar[d]_-{|cata conquer|}
-            \ar[rr]^-{|out|}
+            \ar@@/^/[rr]^-{|out|}
 &
 &
      |1 + (Integer >< [Integer]) >< [Integer >< [Integer]]|
-           \ar[ll]^-{|in|}
+           \ar@@/^/[ll]^-{|in|}
            \ar[d]^-{|id + (id >< id) >< cata conquer|}
 \\
     |Integer >< [Integer]|
@@ -681,8 +681,10 @@ prime_tree = head . untar . buildPairs
 \subsection*{Problema 3}
 O primeiro passo para a implementação da convolução de 2 listas é acrescentar (|length l1 - 1|) zeros ao início da segunda lista
 para que fique com tamanho igual a |length l1 + length l2 - 1|, que é o tamanho da lista resultante da convolução.
-Depois calculamos as sublistas com |sufixes| para simular o deslizar de uma lista sobre a outra.
-De seguida são aplicados 2 |map|, um escrito na forma de catamorfismo outro em anamorfismo para ser possível criar um hilomorfismo.
+
+Depois, calculamos as sublistas com |sufixes| para simular o deslizar de uma lista sobre a outra.
+
+De seguida, são aplicados 2 |map|, um escrito na forma de catamorfismo outro em anamorfismo para ser possível criar um hilomorfismo.
 Primeiro, multiplica-se os elementos correspondentes das sublistas e da primeira lista invertida e de seguida reduz-se cada lista à sua soma
 tendo como resultado a lista correspondente à convolução.
 
@@ -716,7 +718,7 @@ Diagrama |convolve|:
 \xymatrix@@C=3.5cm@@R=1.5cm{
     |[A]|
            \ar[r]^-{|flip padZeros (length l1 -1)|}
-           \ar[drr]_-{|convolve l1|}
+           \ar@@/_/[drr]_-{|convolve l1|}
 &
     |[A]|
             \ar[r]^-{|suffixes|}
