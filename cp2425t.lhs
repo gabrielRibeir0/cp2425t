@@ -582,38 +582,33 @@ hindex = hyloList conquer divide
 \end{code}
 
 \begin{eqnarray*}
-\xymatrix{
+\xymatrix@@C=3.1cm@@R=2cm{
     |[Integer]|
-            \ar[d]_-{|ana divide|}
-            \ar[r]^-{|iSort|}
-&
-    |[Integer]|
-            \ar[r]^-{|outList|}
+           \ar[d]_-{|ana divide|}
+           \ar[r]^-{|iSort . outList|}
 &
     |1 + Integer >< [Integer]|
             \ar[r]^-{|id + (split (split head id) tail . cons)|}
 &
     |1 + (Integer >< [Integer]) >< [Integer]|
-            \ar[d]_-{id + (id x id) x (ana divide)}              
+              \ar[d]^-{|id + (id >< id) >< ana divide|}
 \\
-    |[Integer >< [Integer]]|
-            \ar[rrr]^-{|out|}
+     |[Integer >< [Integer]]|
+            \ar[d]_-{|cata conquer|}
+            \ar[rr]^-{|out|}
 &
 &
-&
-    |1 + (Integer >< [Integer]) >< [Integer >< [Integer]]|
-            \ar[lll]^-{|in|}
-            \ar[d]_-{id + (id x id) x (cata conquer)} 
+     |1 + (Integer >< [Integer]) >< [Integer >< [Integer]]|
+           \ar[ll]^-{|in|}
+           \ar[d]^-{|id + (id >< id) >< cata conquer|}
 \\
     |Integer >< [Integer]|
 &
 &
-&
     |1 + (Integer >< [Integer]) >< (Integer >< [Integer])|
-            \ar[lll]^-{either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)}             
+            \ar[ll]^-{|either (split (const 0) nil) (cond (uncurry (&&) . split pp1 pp2 ) p2 p1)|}
 }
 \end{eqnarray*}
-
 
 \subsection*{Problema 2}
 Primeira parte:
@@ -701,7 +696,7 @@ convolve l1 = hyloList f g . suffixes . flip padZeros (length l1 - 1)
 
 Diagrama |padZeros|:
 \begin{eqnarray*}
-\xymatrix{
+\xymatrix@@C=2cm@@R=2cm{
     |Nat0|
            \ar[d]_-{|padZeros l|}
            \ar[r]^-{|outNat0|}
@@ -718,7 +713,7 @@ Diagrama |padZeros|:
 
 Diagrama |convolve|:
 \begin{eqnarray*}
-\xymatrix{
+\xymatrix@@C=3.5cm@@R=1.5cm{
     |[A]|
            \ar[r]^-{|flip padZeros (length l1 -1)|}
            \ar[drr]_-{|convolve l1|}
@@ -745,31 +740,73 @@ Diagrama |convolve|:
 \subsection*{Problema 4}
 Definição do tipo:
 \begin{code}
-outExpr = undefined
+outExpr (V a) = i1 a
+outExpr (N b) = i2 (i1 b)
+outExpr (T op l) = i2 (i2 (op, l))
 
-recExpr = undefined
+recExpr f = baseExpr id id f
 \end{code}
 \emph{Ana + cata + hylo}:
 \begin{code}
-cataExpr g = undefined
+cataExpr g = g . recExpr (cataExpr g) . outExpr
 
-anaExpr g = undefined
+anaExpr g = inExpr .recExpr (anaExpr g) .g
                 
-hyloExpr h g = undefined
+hyloExpr h g = cataExpr h . anaExpr g
+
+instance Functor (Expr b) where
+    fmap f = cataExpr (inExpr . baseExpr f id id)
+
+instance Applicative (Expr b) where
+    pure = return
+    (<*>) = aap
+
+instance Monad (Expr b) where
+    return = V
+    e >>= f = cataExpr (either f (either N (uncurry T))) e
 \end{code}
 \emph{Maps}:
 \emph{Monad}:
+Monad:
 \emph{Let expressions}:
 \begin{code}
-let_exp = undefined
+let_exp = flip(>>=)
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=5cm@@R=2cm{
+    |Expr C A|
+           \ar[d]_-{|let_exp f|}
+           \ar[r]^-{|outExpr|}
+&
+    |A + (C + op >< (Expr C A))|
+           \ar[d]^-{|id + (id + id x (map (let_exp f))|}
+\\
+     |Expr C B|
+&
+&
+     |A + (C + op >< (Expr C B))|
+           \ar[l]^-{|either f (either N (uncurry T))|}
+}
+\end{eqnarray*}
+
 Catamorfismo monádico:
 \begin{code}
-mcataExpr g = undefined
+mcataExpr g = g .! (aux . recExpr (mcataExpr g) . outExpr)
+
+aux :: Monad m => Either a (Either b (Op, [m c])) -> m (Either a (Either b (Op, m [c])))
+aux = either (return . i1) (either (return . i2 . i1) ret)
+    where ret = return . i2 . i2 . split p1 (sequence . p2)
 \end{code}
 Avaliação de expressões:
 \begin{code}
-evaluate = undefined
+evaluate = cataExpr (either nothing (either Just g))
+    where g (op, vals) = case (op, sequence vals) of
+                            (Add, Just [x, y]) -> Just (x + y)
+                            (Mul, Just [x, y]) -> Just (x * y)
+                            (ITE, Just [cond, t, e]) -> if cond > 0 then Just t else Just e
+                            _ -> Nothing
+
 \end{code}
 
 %----------------- Índice remissivo (exige makeindex) -------------------------%

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.1.11)  12 JAN 2025 13:08
-=======
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.17)  12 JAN 2025 11:57
->>>>>>> bf95bfc (P4 mudanças)
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2024.11.17)  12 JAN 2025 22:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1397,7 +1393,10 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
  []
 
 [4 <./cp2425t_media/treeB.png>]
-<cp2425t_media/lhs.jpg, id=106, 1557.82pt x 967.615pt>
+
+LaTeX Warning: Citation `Kn92' on page 5 undefined on input line 573.
+
+<cp2425t_media/lhs.jpg, id=105, 1557.82pt x 967.615pt>
 File: cp2425t_media/lhs.jpg Graphic file (type jpg)
 <use cp2425t_media/lhs.jpg>
 Package pdftex.def Info: cp2425t_media/lhs.jpg  used on input line 592.
@@ -1439,44 +1438,125 @@ Overfull \hbox (128.0374pt too wide) has occurred while \output is active
 
 \openout7 = `cp2425t.ptb'.
 
- <xymatrix 4x3
+ <xymatrix 3x3
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 82
-4.
+0.
  (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-! Missing } inserted.
-<inserted text> 
-                }
-l.824 }
-       
-? 
-! Missing } inserted.
-<inserted text> 
-                }
-l.824 }
-       
-? 
-! Extra }, or forgotten $.
-<inserted text> }
-                 
-l.824 }
-       
-? 
-! Emergency stop.
-<inserted text> }
-                 
-l.824 }
-       
-End of file on the terminal!
+) 434>
+Overfull \hbox (21.7896pt too wide) in alignment at lines 794--821
+ [][][] []
+ []
 
- 
+
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[8{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}]
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+ <xymatrix 3x2 246>
+Overfull \hbox (1.70712pt too wide) in alignment at lines 883--901
+ [][][] []
+ []
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[9] <xymatrix 2x2 194> <xymatrix 4x2 342>
+Overfull \hbox (46.42252pt too wide) in alignment at lines 965--988
+ [][][] []
+ []
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+<xymatrix 3x2 198>
+Overfull \hbox (161.67824pt too wide) in alignment at lines 1048--1063
+ [][][] []
+ []
+
+
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[10]
+\openout7 = `cp2425t.ptb'.
+
+\openout7 = `cp2425t.ptb'.
+
+ (./cp2425t.ind
+Overfull \hbox (128.0374pt too wide) has occurred while \output is active
+ [][]| 
+ []
+
+[11] [12
+
+
+]) (./cp2425t.bbl) (./cp2425t.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-01-22>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `cp2425t.out' has not changed.
+(rerunfilecheck)             Checksum: 77E1DCEE2046690F1FC223B6C42FC6FD;1148.
+ ) 
 Here is how much of TeX's memory you used:
- 47721 strings out of 476106
- 1044789 string characters out of 5793933
- 1940975 words of memory out of 5000000
- 69038 multiletter control sequences out of 15000+600000
- 791287 words of font info for 147 fonts, out of 8000000 for 9000
+ 47747 strings out of 476106
+ 1045221 string characters out of 5793932
+ 1949975 words of memory out of 5000000
+ 69050 multiletter control sequences out of 15000+600000
+ 791698 words of font info for 148 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 99i,19n,101p,3277b,687s stack positions out of 10000i,1000n,20000p,200000b,200000s
-!  ==> Fatal error occurred, no output PDF file produced!
+ 99i,19n,101p,3277b,693s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/paratype/ptserif/PTF55F.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/paratype/ptserif/PTF56F.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/paratype/ptserif/PTF75F.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/paratype/ptmono/PTM55F.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/paratype/ptsans/PTS55F.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/paratype/ptsans/PTS56F.pfb></usr/share/texlive/texmf-dist/fonts/type1/paraty
+pe/ptsans/PTS75F.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmext
+ra/cmex9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texmf/fonts/type
+1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/stmaryrd/stmary10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/stmaryrd/stmary9.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/xypic/xyatip10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/xypic/xybtip10.pfb>
+Output written on cp2425t.pdf (13 pages, 752390 bytes).
+PDF statistics:
+ 324 PDF objects out of 1000 (max. 8388607)
+ 250 compressed objects within 3 object streams
+ 34 named destinations out of 1000 (max. 500000)
+ 104 words of extra memory for PDF output out of 10000 (max. 10000000)
+
