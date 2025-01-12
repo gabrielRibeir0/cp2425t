@@ -684,6 +684,12 @@ prime_tree = head . untar . buildPairs
 \end{code}
 
 \subsection*{Problema 3}
+O primeiro passo para a implementação da convolução de 2 listas é acrescentar (|length l1 - 1|) zeros ao início da segunda lista
+para que fique com tamanho igual a |length l1 + length l2 - 1|, que é o tamanho da lista resultante da convolução.
+Depois calculamos as sublistas com |sufixes| para simular o deslizar de uma lista sobre a outra.
+De seguida são aplicados 2 |map|, um escrito na forma de catamorfismo outro em anamorfismo para ser possível criar um hilomorfismo.
+Primeiro, multiplica-se os elementos correspondentes das sublistas e da primeira lista invertida e de seguida reduz-se cada lista à sua soma
+tendo como resultado a lista correspondente à convolução.
 
 \begin{code}
 convolve :: Num a => [a] -> [a] -> [a]
@@ -692,6 +698,49 @@ convolve l1 = hyloList f g . suffixes . flip padZeros (length l1 - 1)
         f = either nil (cons . (sum >< id))
         g = (id -|- (zipWith (*) (reverse' l1) >< id)) . outList
 \end{code}
+
+Diagrama |padZeros|:
+\begin{eqnarray*}
+\xymatrix{
+    |Nat0|
+           \ar[d]_-{|padZeros l|}
+           \ar[r]^-{|outNat0|}
+&
+    |1 + Nat0|
+              \ar[d]^-{|id + (padZeros l)|}
+\\
+     |[Integer]|
+&
+     |1 + [Integer]|
+           \ar[l]^-{|either (const l) (0:)|}
+}
+\end{eqnarray*}
+
+Diagrama |convolve|:
+\begin{eqnarray*}
+\xymatrix{
+    |[A]|
+           \ar[r]^-{|flip padZeros (length l1 -1)|}
+           \ar[drr]_-{|convolve l1|}
+&
+    |[A]|
+            \ar[r]^-{|suffixes|}
+&
+    |[[A]]|
+            \ar[r]^-{|g|}
+            \ar[d]^-{|hyloList f g|}
+&
+    |1 + [A] >< [[A]]|
+            \ar[d]^-{|id + id >< (hyloList f g)|}
+\\
+&
+&
+     |[A]|
+&
+     |1 + [A] >< [A]|
+           \ar[l]^-{|f|}
+}
+\end{eqnarray*}
 
 \subsection*{Problema 4}
 Definição do tipo:
